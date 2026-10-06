@@ -6,25 +6,25 @@ namespace AxiomVms::Tests
 {
     TEST(JsonValueTests, EmptyConstructorIsNullPointer)
     {
-        JsonValue jsonValue;
+        const JsonValue jsonValue;
         EXPECT_EQ(jsonValue.IsNull(), true);
     }
 
     TEST(JsonValueTests, NullPointerConstructorIsNull)
     {
-        JsonValue jsonValue(nullptr);
+        const JsonValue jsonValue(nullptr);
         EXPECT_EQ(jsonValue.IsNull(), true);
     }
 
     TEST(JsonValueTests, BooleanConstructorIsBoolean)
     {
-        JsonValue jsonValue(true);
+        const JsonValue jsonValue(true);
         EXPECT_EQ(jsonValue.IsBoolean(), true);
     }
 
     TEST(JsonValueTests, Float32ConstructorIsNumber)
     {
-        JsonValue jsonValue(1.0f);
+        const JsonValue jsonValue(1.0f);
         EXPECT_EQ(jsonValue.IsNumber(), true);
     }
 
