@@ -1,0 +1,2 @@
+add_subdirectory(AxiomVms.Core)
+add_subdirectory(AxiomVms.Application)

@@ -1,0 +1,119 @@
+# =========================
+# Build Output
+# =========================
+[Bb]uild
+CMakeUserPresets.json
+cmake-build-*/
+dist/
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+
+# =========================
+# .NET
+# =========================
+
+*.user
+*.suo
+*.userosscache
+*.rsuser
+*.cache
+*.pdb
+*.mdb
+
+# Test Results
+TestResults/
+*.trx
+
+# =========================
+# Rider
+# =========================
+
+.idea/
+*.sln.iml
+
+# =========================
+# VS Code
+# =========================
+
+.vscode/
+
+# =========================
+# Firebase Studio / IDX
+# =========================
+
+.idx/
+.firebase/
+.cache/
+
+# Nix
+.direnv/
+result/
+
+# =========================
+# ASP.NET Secrets
+# =========================
+
+appsettings.Development.json
+appsettings.Local.json
+appsettings.*.local.json
+
+# User Secrets
+secrets.json
+
+# =========================
+# Entity Framework
+# =========================
+
+Migrations/*.Designer.cs
+
+# Uncomment ONLY if migrations
+# are generated elsewhere.
+# Migrations/
+
+# =========================
+# Logs
+# =========================
+
+logs/
+*.log
+
+# =========================
+# Coverage
+# =========================
+
+coverage/
+coverage-report/
+*.coverage
+*.coveragexml
+
+# Coverlet
+coverage.cobertura.xml
+
+# =========================
+# OS Files
+# =========================
+
+.DS_Store
+Thumbs.db
+
+# =========================
+# NuGet
+# =========================
+
+*.nupkg
+*.snupkg
+
+# Keep package lock files
+# packages/
+# !packages/build/
+
+# =========================
+# Generated Files
+# =========================
+
+Generated/
+Artifacts/
