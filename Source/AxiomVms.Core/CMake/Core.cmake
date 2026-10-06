@@ -2,6 +2,7 @@ target_sources(
     AxiomVms.Core
     PRIVATE
         # Json Core Implementation
+        Private/Core/Json/JsonFile.cpp
         Private/Core/Json/JsonParser.cpp
         Private/Core/Json/JsonValue.cpp
 
@@ -19,6 +20,7 @@ target_sources(
         Public/CoreMinimal.h
 
         # Json Core Headers
+        Public/Core/Json/JsonFile.h
         Public/Core/Json/JsonParseError.h
         Public/Core/Json/JsonParser.h
         Public/Core/Json/JsonSourceLocation.h
