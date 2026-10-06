@@ -1,0 +1,22 @@
+{
+  "Cameras":{
+    "front_entrance": {
+      "Name": "Front Entrance",
+      "Url": "rtsp://192.168.1.100:554/user=admin&password=&channel=1&stream=0.sdp",
+      "VideoFormat": "H264",
+      "VideoResolution": {
+        "Width": 1280,
+        "Height": 720
+      }
+    },
+    "back_entrance": {
+      "Name": "Back Entrance",
+      "Url": "rtsp://192.168.1.100:554/user=admin&password=&channel=2&stream=0.sdp",
+      "VideoFormat": "H264",
+      "VideoResolution": {
+        "Width": 1280,
+        "Height": 720
+      }
+    }
+  }
+}

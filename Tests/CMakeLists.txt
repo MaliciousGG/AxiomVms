@@ -26,11 +26,18 @@ target_link_libraries(
         GTest::gtest_main
 )
 
-configure_file(
-        "${CMAKE_CURRENT_SOURCE_DIR}/Core/Json/JsonFileTestData/JsonFileContainsExpectedData_1.json"
-        "${CMAKE_CURRENT_BINARY_DIR}/JsonFileContainsExpectedData_1.json"
-        COPYONLY
+set(JSON_TEST_FILES
+        JsonFileContainsExpectedData_1.json
+        JsonFileContainsExpectedData_2.json
 )
+
+foreach(TEST_FILE IN LISTS JSON_TEST_FILES)
+    configure_file(
+            "${CMAKE_CURRENT_SOURCE_DIR}/Core/Json/JsonFileTestData/${TEST_FILE}"
+            "${CMAKE_CURRENT_BINARY_DIR}/JsonFileTestData/${TEST_FILE}"
+            COPYONLY
+    )
+endforeach()
 
 include(GoogleTest)
 
