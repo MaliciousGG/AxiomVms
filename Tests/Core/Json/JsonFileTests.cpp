@@ -53,6 +53,23 @@ namespace AxiomVms::Tests
         }
     }
 
+    namespace
+    {
+        struct VideoResolution
+        {
+            int Width;
+            int Height;
+        };
+
+        struct CameraData
+        {
+            FString Name;
+            FString Url;
+            FString VideoFormat;
+            VideoResolution Resolution;
+        };
+    }
+
     TEST(JsonFileTests, JsonFileContainsExpectedData_2)
     {
         JsonFile file;
@@ -68,20 +85,6 @@ namespace AxiomVms::Tests
 
         const JsonValue& camerasValue = rootObject.at("Cameras");
         ASSERT_TRUE(camerasValue.IsObject()) << "Cameras must be an object.";
-
-        struct VideoResolution
-        {
-            int Width;
-            int Height;
-        };
-
-        struct CameraData
-        {
-            FString Name;
-            FString Url;
-            FString VideoFormat;
-            VideoResolution Resolution;
-        };
 
         const TMap<FString, CameraData> expectedCameras =
         {
@@ -155,6 +158,60 @@ namespace AxiomVms::Tests
             EXPECT_DOUBLE_EQ(resolution.at("Width").AsFloat64(), expected.Resolution.Width);
 
             EXPECT_DOUBLE_EQ(resolution.at("Height").AsFloat64(), expected.Resolution.Height);
+        }
+    }
+
+    TEST(JsonFileTests, JsonFileContainsExpectedData_2_StructAssign)
+    {
+        JsonFile file;
+        FString error;
+
+        ASSERT_TRUE(file.Load("JsonFileTestData/JsonFileContainsExpectedData_2.json", error)) << error;
+
+        const JsonValue& root = file.GetRoot();
+        const JsonObject& rootObject = root.AsObject();
+        const JsonValue& camerasValue = rootObject.at("Cameras");
+        const JsonObject& cameras = camerasValue.AsObject();
+
+        TMap<FString, CameraData> assignedCameras;
+
+        for (const auto& [cameraId, cameraValue] : cameras)
+        {
+            ASSERT_TRUE(cameraValue.IsObject());
+            const JsonObject& camera = cameraValue.AsObject();
+
+            const JsonObject& resolution = camera.at("VideoResolution").AsObject();
+
+            CameraData cameraData{};
+            cameraData.Name = camera.at("Name").AsFString();
+            cameraData.Url = camera.at("Url").AsFString();
+            cameraData.VideoFormat = camera.at("VideoFormat").AsFString();
+            cameraData.Resolution.Width = static_cast<int>(resolution.at("Width").AsFloat64());
+            cameraData.Resolution.Height = static_cast<int>(resolution.at("Height").AsFloat64());
+
+            assignedCameras.emplace(cameraId, cameraData);
+        }
+
+        ASSERT_TRUE(assignedCameras.contains("front_entrance"));
+
+        {
+            const auto&[Name, Url, VideoFormat, Resolution] = assignedCameras.at("front_entrance");
+
+            EXPECT_EQ(Name, "Front Entrance");
+            EXPECT_EQ(Url, "rtsp://192.168.1.100:554/user=admin&password=&channel=1&stream=0.sdp");
+            EXPECT_EQ(VideoFormat, "H264");
+            EXPECT_EQ(Resolution.Width, 1280);
+            EXPECT_EQ(Resolution.Height, 720);
+        }
+
+        {
+            const auto&[Name, Url, VideoFormat, Resolution] = assignedCameras.at("back_entrance");
+
+            EXPECT_EQ(Name, "Back Entrance");
+            EXPECT_EQ(Url, "rtsp://192.168.1.100:554/user=admin&password=&channel=2&stream=0.sdp");
+            EXPECT_EQ(VideoFormat, "H264");
+            EXPECT_EQ(Resolution.Width, 1280);
+            EXPECT_EQ(Resolution.Height, 720);
         }
     }
 }
