@@ -1,6 +1,6 @@
 target_sources(
-    AxiomVms.Core
-    PRIVATE
+        AxiomVms.Core
+        PRIVATE
         # Json Core Implementation
         Private/Core/Json/JsonFile.cpp
         Private/Core/Json/JsonParser.cpp
@@ -10,7 +10,7 @@ target_sources(
         Private/Core/Logging/ConsoleLogger.cpp
         Private/Core/Logging/Log.cpp
 
-    PUBLIC
+        PUBLIC
         # Main Core Headers
         Public/Core/Api.h
         Public/Core/Assert.h
@@ -18,6 +18,9 @@ target_sources(
         Public/Core/Platform.h
         Public/Core/Types.h
         Public/CoreMinimal.h
+
+        # Containers Core Headers
+        Public/Core/Containers/TArray.h
 
         # Json Core Headers
         Public/Core/Json/JsonFile.h

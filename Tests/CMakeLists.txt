@@ -14,6 +14,8 @@ add_executable(
     Core/Cameras/CameraManagerTests.cpp
     Core/Cameras/CameraSessionTests.cpp
 
+    Core/Containers/TArrayTests.cpp
+
     Core/Json/JsonFileTests.cpp
     Core/Json/JsonParserTests.cpp
     Core/Json/JsonValueTests.cpp

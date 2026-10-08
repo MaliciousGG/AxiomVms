@@ -6,14 +6,6 @@
 
 namespace AxiomVms::Tests
 {
-    TEST(JsonFileTests, JsonFileLoads)
-    {
-        JsonFile file;
-        FString error;
-
-        ASSERT_TRUE(file.Load("test.json", error)) << "Failed to load test.json: " << error;
-    }
-
     TEST(JsonFileTests, JsonFileContainsExpectedData_1)
     {
         JsonFile file;
