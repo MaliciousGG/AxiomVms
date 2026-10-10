@@ -10,7 +10,7 @@
 
 ### **Members**
 - `T* Data_` 
-- `Size_T Capacity` 
+- `Size_T Capacity_` 
 - `Size_T Size_`
 
 ### **Constructors:**

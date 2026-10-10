@@ -21,6 +21,7 @@ target_sources(
 
         # Containers Core Headers
         Public/Core/Containers/TArray.h
+        Public/Core/Containers/TArray.inl
 
         # Json Core Headers
         Public/Core/Json/JsonFile.h
