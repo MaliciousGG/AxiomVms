@@ -8,14 +8,14 @@ namespace Axiom::Tests
 {
     TEST(JsonFileTests, JsonFileContainsExpectedData_1)
     {
-        JsonFile file;
-        FString error;
+        JsonFile File;
+        FString Error;
 
-        ASSERT_TRUE(file.Load("JsonFileTestData/JsonFileContainsExpectedData_1.json", error)) << error;
+        ASSERT_TRUE(File.Load("JsonFileTestData/JsonFileContainsExpectedData_1.json", Error)) << Error;
 
-        const JsonValue& root = file.GetRoot();
+        const JsonValue& Root = File.GetRoot();
 
-        ASSERT_TRUE(root.IsObject()) << "Expected a JSON object.";
+        ASSERT_TRUE(Root.IsObject()) << "Expected a JSON object.";
 
         struct ExpectedData
         {
@@ -23,7 +23,7 @@ namespace Axiom::Tests
             FString Value;
         };
 
-        const ExpectedData expectedData[] =
+        const ExpectedData ExpectedData[] =
         {
             {
                 .Key = "name",
@@ -31,17 +31,17 @@ namespace Axiom::Tests
             }
         };
 
-        const JsonObject& object = root.AsObject();
+        const JsonObject& Object = Root.AsObject();
 
-        for (const auto&[Key, Value] : expectedData)
+        for (const auto&[Key, Value] : ExpectedData)
         {
-            const auto entry = object.find(Key);
+            const auto Entry = Object.find(Key);
 
-            ASSERT_NE(entry, object.end()) << "Missing key: " << Key;
+            ASSERT_NE(Entry, Object.end()) << "Missing key: " << Key;
 
-            ASSERT_TRUE(entry->second.IsString()) << "Expected a string for key: " << Key;
+            ASSERT_TRUE(Entry->second.IsString()) << "Expected a string for key: " << Key;
 
-            EXPECT_EQ(entry->second.AsFString(), Value) << "Unexpected value for key: " << Key;
+            EXPECT_EQ(Entry->second.AsFString(), Value) << "Unexpected value for key: " << Key;
         }
     }
 
@@ -64,21 +64,21 @@ namespace Axiom::Tests
 
     TEST(JsonFileTests, JsonFileContainsExpectedData_2)
     {
-        JsonFile file;
-        FString error;
+        JsonFile File;
+        FString Error;
 
-        ASSERT_TRUE(file.Load("JsonFileTestData/JsonFileContainsExpectedData_2.json", error)) << error;
+        ASSERT_TRUE(File.Load("JsonFileTestData/JsonFileContainsExpectedData_2.json", Error)) << Error;
 
-        const JsonValue& root = file.GetRoot();
-        ASSERT_TRUE(root.IsObject()) << "Expected a JSON object.";
+        const JsonValue& Root = File.GetRoot();
+        ASSERT_TRUE(Root.IsObject()) << "Expected a JSON object.";
 
-        const JsonObject& rootObject = root.AsObject();
-        ASSERT_TRUE(rootObject.contains("Cameras")) << "Missing Cameras.";
+        const JsonObject& RootObject = Root.AsObject();
+        ASSERT_TRUE(RootObject.contains("Cameras")) << "Missing Cameras.";
 
-        const JsonValue& camerasValue = rootObject.at("Cameras");
-        ASSERT_TRUE(camerasValue.IsObject()) << "Cameras must be an object.";
+        const JsonValue& CameraValues = RootObject.at("Cameras");
+        ASSERT_TRUE(CameraValues.IsObject()) << "Cameras must be an object.";
 
-        const TMap<FString, CameraData> expectedCameras =
+        const TMap<FString, CameraData> ExpectedCameras =
         {
             {
                 "front_entrance",
@@ -106,88 +106,88 @@ namespace Axiom::Tests
             }
         };
 
-        const JsonObject& cameras = camerasValue.AsObject();
-        EXPECT_EQ(cameras.size(), expectedCameras.size());
+        const JsonObject& Cameras = CameraValues.AsObject();
+        EXPECT_EQ(Cameras.size(), ExpectedCameras.size());
 
-        for (const auto& [cameraId, expected] : expectedCameras)
+        for (const auto& [CameraId, Expected] : ExpectedCameras)
         {
-            SCOPED_TRACE("Camera: " + cameraId);
+            SCOPED_TRACE("Camera: " + CameraId);
 
-            ASSERT_TRUE(cameras.contains(cameraId)) << "Missing camera.";
+            ASSERT_TRUE(Cameras.contains(CameraId)) << "Missing Camera.";
 
-            const JsonValue& cameraValue = cameras.at(cameraId);
+            const JsonValue& cameraValue = Cameras.at(CameraId);
             ASSERT_TRUE(cameraValue.IsObject());
 
-            const JsonObject& camera = cameraValue.AsObject();
+            const JsonObject& Camera = cameraValue.AsObject();
 
-            const TMap<FString, FString> expectedStrings =
+            const TMap<FString, FString> ExpectedStrings =
             {
-                {"Name", expected.Name},
-                {"Url", expected.Url},
-                {"VideoFormat", expected.VideoFormat}
+                {"Name", Expected.Name},
+                {"Url", Expected.Url},
+                {"VideoFormat", Expected.VideoFormat}
             };
 
-            for (const auto& [key, expectedValue] : expectedStrings)
+            for (const auto& [Key, ExpectedValue] : ExpectedStrings)
             {
-                SCOPED_TRACE("Field: " + key);
+                SCOPED_TRACE("Field: " + Key);
 
-                ASSERT_TRUE(camera.contains(key)) << "Missing field.";
-                ASSERT_TRUE(camera.at(key).IsString()) << "Expected a string.";
+                ASSERT_TRUE(Camera.contains(Key)) << "Missing field.";
+                ASSERT_TRUE(Camera.at(Key).IsString()) << "Expected a string.";
 
-                EXPECT_EQ(camera.at(key).AsFString(), expectedValue);
+                EXPECT_EQ(Camera.at(Key).AsFString(), ExpectedValue);
             }
 
-            ASSERT_TRUE(camera.contains("VideoResolution"));
-            ASSERT_TRUE(camera.at("VideoResolution").IsObject());
+            ASSERT_TRUE(Camera.contains("VideoResolution"));
+            ASSERT_TRUE(Camera.at("VideoResolution").IsObject());
 
-            const JsonObject& resolution = camera.at("VideoResolution").AsObject();
+            const JsonObject& Resolution = Camera.at("VideoResolution").AsObject();
 
-            ASSERT_TRUE(resolution.contains("Width"));
-            ASSERT_TRUE(resolution.contains("Height"));
-            ASSERT_TRUE(resolution.at("Width").IsNumber());
-            ASSERT_TRUE(resolution.at("Height").IsNumber());
+            ASSERT_TRUE(Resolution.contains("Width"));
+            ASSERT_TRUE(Resolution.contains("Height"));
+            ASSERT_TRUE(Resolution.at("Width").IsNumber());
+            ASSERT_TRUE(Resolution.at("Height").IsNumber());
 
-            EXPECT_DOUBLE_EQ(resolution.at("Width").AsFloat64(), expected.Resolution.Width);
+            EXPECT_DOUBLE_EQ(Resolution.at("Width").AsFloat64(), Expected.Resolution.Width);
 
-            EXPECT_DOUBLE_EQ(resolution.at("Height").AsFloat64(), expected.Resolution.Height);
+            EXPECT_DOUBLE_EQ(Resolution.at("Height").AsFloat64(), Expected.Resolution.Height);
         }
     }
 
     TEST(JsonFileTests, JsonFileContainsExpectedData_2_StructAssign)
     {
-        JsonFile file;
-        FString error;
+        JsonFile File;
+        FString Error;
 
-        ASSERT_TRUE(file.Load("JsonFileTestData/JsonFileContainsExpectedData_2.json", error)) << error;
+        ASSERT_TRUE(File.Load("JsonFileTestData/JsonFileContainsExpectedData_2.json", Error)) << Error;
 
-        const JsonValue& root = file.GetRoot();
-        const JsonObject& rootObject = root.AsObject();
-        const JsonValue& camerasValue = rootObject.at("Cameras");
-        const JsonObject& cameras = camerasValue.AsObject();
+        const JsonValue& Root = File.GetRoot();
+        const JsonObject& RootObject = Root.AsObject();
+        const JsonValue& CameraValues = RootObject.at("Cameras");
+        const JsonObject& Cameras = CameraValues.AsObject();
 
-        TMap<FString, CameraData> assignedCameras;
+        TMap<FString, CameraData> AssignedCameras;
 
-        for (const auto& [cameraId, cameraValue] : cameras)
+        for (const auto& [CameraId, CameraValue] : Cameras)
         {
-            ASSERT_TRUE(cameraValue.IsObject());
-            const JsonObject& camera = cameraValue.AsObject();
+            ASSERT_TRUE(CameraValue.IsObject());
+            const JsonObject& Camera = CameraValue.AsObject();
 
-            const JsonObject& resolution = camera.at("VideoResolution").AsObject();
+            const JsonObject& Resolution = Camera.at("VideoResolution").AsObject();
 
-            CameraData cameraData{};
-            cameraData.Name = camera.at("Name").AsFString();
-            cameraData.Url = camera.at("Url").AsFString();
-            cameraData.VideoFormat = camera.at("VideoFormat").AsFString();
-            cameraData.Resolution.Width = static_cast<int>(resolution.at("Width").AsFloat64());
-            cameraData.Resolution.Height = static_cast<int>(resolution.at("Height").AsFloat64());
+            CameraData CameraData{};
+            CameraData.Name = Camera.at("Name").AsFString();
+            CameraData.Url = Camera.at("Url").AsFString();
+            CameraData.VideoFormat = Camera.at("VideoFormat").AsFString();
+            CameraData.Resolution.Width = static_cast<int>(Resolution.at("Width").AsFloat64());
+            CameraData.Resolution.Height = static_cast<int>(Resolution.at("Height").AsFloat64());
 
-            assignedCameras.emplace(cameraId, cameraData);
+            AssignedCameras.emplace(CameraId, CameraData);
         }
 
-        ASSERT_TRUE(assignedCameras.contains("front_entrance"));
+        ASSERT_TRUE(AssignedCameras.contains("front_entrance"));
 
         {
-            const auto&[Name, Url, VideoFormat, Resolution] = assignedCameras.at("front_entrance");
+            const auto&[Name, Url, VideoFormat, Resolution] = AssignedCameras.at("front_entrance");
 
             EXPECT_EQ(Name, "Front Entrance");
             EXPECT_EQ(Url, "rtsp://192.168.1.100:554/user=admin&password=&channel=1&stream=0.sdp");
@@ -197,7 +197,7 @@ namespace Axiom::Tests
         }
 
         {
-            const auto&[Name, Url, VideoFormat, Resolution] = assignedCameras.at("back_entrance");
+            const auto&[Name, Url, VideoFormat, Resolution] = AssignedCameras.at("back_entrance");
 
             EXPECT_EQ(Name, "Back Entrance");
             EXPECT_EQ(Url, "rtsp://192.168.1.100:554/user=admin&password=&channel=2&stream=0.sdp");

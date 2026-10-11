@@ -17,9 +17,9 @@ namespace Axiom
 
     std::uint64_t CameraManager::AddCamera(std::string InCameraName, std::string InStreamUrl)
     {
-        for (const auto &camera: Cameras_ | std::views::values)
+        for (const auto &Camera: Cameras_ | std::views::values)
         {
-            if (camera.Name == InCameraName && camera.StreamUrl == InStreamUrl)
+            if (Camera.Name == InCameraName && Camera.StreamUrl == InStreamUrl)
             {
                 return 0;
             }
@@ -144,6 +144,6 @@ namespace Axiom
 
     std::uint64_t CameraManager::NextCameraId()
     {
-        return ++NextId_;
+        return NextId_++;
     }
 }

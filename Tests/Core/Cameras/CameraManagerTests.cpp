@@ -13,9 +13,9 @@ namespace {
     class FailingCameraStreamFactory final : public Axiom::ICameraStreamFactory
     {
     public:
-        std::unique_ptr<Axiom::ICameraStream> CreateCameraStream(const Axiom::Camera& camera) override
+        std::unique_ptr<Axiom::ICameraStream> CreateCameraStream(const Axiom::Camera& InCamera) override
         {
-            static_cast<void>(camera);
+            static_cast<void>(InCamera);
 
             return nullptr;
         }
@@ -27,182 +27,183 @@ namespace Axiom::Tests
 
     TEST(CameraManagerTests, AddCameraIncreasesCameraCount)
     {
-        CameraManager manager(std::make_unique<NullCameraStreamFactory>());
-        const std::uint64_t id = manager.AddCamera("Front Entrance", "rtsp://127.0.0.1/test");
+        CameraManager Manager(std::make_unique<NullCameraStreamFactory>());
+        const std::uint64_t CamId = Manager.AddCamera("Front Entrance", "rtsp://127.0.0.1/test");
 
-        EXPECT_NE(id, 0);
-        EXPECT_EQ(manager.GetCameraCount(), 1);
+        EXPECT_NE(CamId, 0);
+        EXPECT_EQ(Manager.GetCameraCount(), 1);
     }
 
     TEST(CameraManagerTests, AddedCameraCanBeFound)
     {
-        CameraManager manager(std::make_unique<NullCameraStreamFactory>());
-        const std::uint64_t id = manager.AddCamera("Front Entrance", "rtsp://127.0.0.1/test");
+        CameraManager Manager(std::make_unique<NullCameraStreamFactory>());
+        const std::uint64_t CamId = Manager.AddCamera("Front Entrance", "rtsp://127.0.0.1/test");
 
-        const Camera* camera = manager.FindCamera(id);
+        const Camera* Camera = Manager.FindCamera(CamId);
 
-        ASSERT_NE(camera, nullptr);
+        ASSERT_NE(Camera, nullptr);
 
-        EXPECT_EQ(camera->Id, id);
-        EXPECT_EQ(camera->Name, "Front Entrance");
-        EXPECT_EQ(camera->StreamUrl, "rtsp://127.0.0.1/test");
+        EXPECT_EQ(Camera->Id, CamId);
+        EXPECT_EQ(Camera->Name, "Front Entrance");
+        EXPECT_EQ(Camera->StreamUrl, "rtsp://127.0.0.1/test");
     }
 
     TEST(CameraManagerTests, UnknownCameraCannotBeFound)
     {
-        CameraManager manager(std::make_unique<NullCameraStreamFactory>());
+        CameraManager Manager(std::make_unique<NullCameraStreamFactory>());
 
-        EXPECT_EQ(manager.FindCamera(999), nullptr);
+        EXPECT_EQ(Manager.FindCamera(999), nullptr);
     }
 
     TEST(CameraManagerTests, CameraCanBeRemoved)
     {
-        CameraManager manager(std::make_unique<NullCameraStreamFactory>());
-        const std::uint64_t id = manager.AddCamera("Front Entrance", "rtsp://127.0.0.1/test");
+        CameraManager Manager(std::make_unique<NullCameraStreamFactory>());
+        const std::uint64_t CamId = Manager.AddCamera("Front Entrance", "rtsp://127.0.0.1/test");
 
-        ASSERT_NE(id, 0);
-        EXPECT_TRUE(manager.RemoveCamera(id));
+        ASSERT_NE(CamId, 0);
+        EXPECT_TRUE(Manager.RemoveCamera(CamId));
 
-        EXPECT_EQ(manager.GetCameraCount(), 0);
-        EXPECT_EQ(manager.FindCamera(id), nullptr);
+        EXPECT_EQ(Manager.GetCameraCount(), 0);
+        EXPECT_EQ(Manager.FindCamera(CamId), nullptr);
     }
 
     TEST(CameraManagerTests, UnknownCameraCannotBeRemoved)
     {
-        CameraManager manager(std::make_unique<NullCameraStreamFactory>());
+        CameraManager Manager(std::make_unique<NullCameraStreamFactory>());
 
-        EXPECT_FALSE(manager.RemoveCamera(999));
+        EXPECT_FALSE(Manager.RemoveCamera(999));
     }
 
     TEST(CameraManagerTests, MultipleCamerasIncreaseCameraCount)
     {
-        CameraManager manager(std::make_unique<NullCameraStreamFactory>());
+        CameraManager Manager(std::make_unique<NullCameraStreamFactory>());
 
-        const std::uint64_t firstId = manager.AddCamera("Front Entrance", "rtsp://127.0.0.1/test");
+        const std::uint64_t FirstId = Manager.AddCamera("Front Entrance", "rtsp://127.0.0.1/test");
 
-        const std::uint64_t secondId = manager.AddCamera("Parking Lot", "rtsp://127.0.0.1/test2");
+        const std::uint64_t SecondId = Manager.AddCamera("Parking Lot", "rtsp://127.0.0.1/test2");
 
-        EXPECT_NE(firstId, 0);
-        EXPECT_NE(secondId, 0);
-        EXPECT_NE(firstId, secondId);
+        EXPECT_NE(FirstId, 0);
+        EXPECT_NE(SecondId, 0);
+        EXPECT_NE(FirstId, SecondId);
 
-        EXPECT_EQ(manager.GetCameraCount(), 2);
+        EXPECT_EQ(Manager.GetCameraCount(), 2);
     }
 
     TEST(CameraManagerTests, DuplicateCameraCannotBeAdded)
     {
-        CameraManager manager(std::make_unique<NullCameraStreamFactory>());
-        const std::uint64_t firstId = manager.AddCamera("Front Entrance", "rtsp://127.0.0.1/test");
-        const std::uint64_t secondId = manager.AddCamera("Front Entrance","rtsp://127.0.0.1/test");
+        CameraManager Manager(std::make_unique<NullCameraStreamFactory>());
 
-        EXPECT_EQ(firstId, 1);
-        EXPECT_EQ(secondId, 0);
+        const std::uint64_t FirstId = Manager.AddCamera("Front Entrance", "rtsp://127.0.0.1/test");
+        const std::uint64_t SecondId = Manager.AddCamera("Front Entrance","rtsp://127.0.0.1/test");
 
-        EXPECT_EQ(manager.GetCameraCount(), 1);
+        EXPECT_EQ(FirstId, 1);
+        EXPECT_EQ(SecondId, 0);
+
+        EXPECT_EQ(Manager.GetCameraCount(), 1);
     }
 
     TEST(CameraManagerTests, SameNameWithDifferentUrlCanBeAdded)
     {
-        CameraManager manager(std::make_unique<NullCameraStreamFactory>());
+        CameraManager Manager(std::make_unique<NullCameraStreamFactory>());
 
-        const std::uint64_t firstId = manager.AddCamera("Front Entrance", "rtsp://127.0.0.1/test");
-        const std::uint64_t secondId = manager.AddCamera("Front Entrance", "rtsp://127.0.0.1/test2");
+        const std::uint64_t FirstId = Manager.AddCamera("Front Entrance", "rtsp://127.0.0.1/test");
+        const std::uint64_t SecondId = Manager.AddCamera("Front Entrance", "rtsp://127.0.0.1/test2");
 
-        EXPECT_NE(firstId, 0);
-        EXPECT_NE(secondId, 0);
+        EXPECT_NE(FirstId, 0);
+        EXPECT_NE(SecondId, 0);
 
-        EXPECT_EQ(manager.GetCameraCount(), 2);
+        EXPECT_EQ(Manager.GetCameraCount(), 2);
     }
 
     TEST(CameraManagerTests, SameUrlWithDifferentNameCanBeAdded)
     {
-        CameraManager manager(std::make_unique<NullCameraStreamFactory>());
+        CameraManager Manager(std::make_unique<NullCameraStreamFactory>());
 
-        const std::uint64_t firstId = manager.AddCamera("Front Entrance", "rtsp://127.0.0.1/test");
-        const std::uint64_t secondId = manager.AddCamera("Front Entrance Backup", "rtsp://127.0.0.1/test");
+        const std::uint64_t FirstId = Manager.AddCamera("Front Entrance", "rtsp://127.0.0.1/test");
+        const std::uint64_t SecondId = Manager.AddCamera("Front Entrance Backup", "rtsp://127.0.0.1/test");
 
-        EXPECT_NE(firstId, 0);
-        EXPECT_NE(secondId, 0);
+        EXPECT_NE(FirstId, 0);
+        EXPECT_NE(SecondId, 0);
 
-        EXPECT_EQ(manager.GetCameraCount(), 2);
+        EXPECT_EQ(Manager.GetCameraCount(), 2);
     }
 
     TEST(CameraManagerTests, CameraCanBeStarted)
     {
-        CameraManager manager(std::make_unique<NullCameraStreamFactory>());
+        CameraManager Manager(std::make_unique<NullCameraStreamFactory>());
 
-        const std::uint64_t id = manager.AddCamera("Front Entrance", "rtsp://127.0.0.1/test");
+        const std::uint64_t CamId = Manager.AddCamera("Front Entrance", "rtsp://127.0.0.1/test");
 
-        ASSERT_NE(id, 0);
-        EXPECT_TRUE(manager.StartCamera(id));
+        ASSERT_NE(CamId, 0);
+        EXPECT_TRUE(Manager.StartCamera(CamId));
 
-        const Camera* camera = manager.FindCamera(id);
+        const Camera* Camera = Manager.FindCamera(CamId);
 
-        ASSERT_NE(camera, nullptr);
-        EXPECT_EQ(camera->State, ECameraState::Connected);
+        ASSERT_NE(Camera, nullptr);
+        EXPECT_EQ(Camera->State, ECameraState::Connected);
     }
 
     TEST(CameraManagerTests, CameraCannotBeStartedTwice)
     {
-        CameraManager manager(std::make_unique<NullCameraStreamFactory>());
+        CameraManager Manager(std::make_unique<NullCameraStreamFactory>());
 
-        const std::uint64_t id = manager.AddCamera("Front Entrance", "rtsp://127.0.0.1/test");
+        const std::uint64_t CamId = Manager.AddCamera("Front Entrance", "rtsp://127.0.0.1/test");
 
-        ASSERT_NE(id, 0);
+        ASSERT_NE(CamId, 0);
 
-        EXPECT_TRUE(manager.StartCamera(id));
-        EXPECT_FALSE(manager.StartCamera(id));
+        EXPECT_TRUE(Manager.StartCamera(CamId));
+        EXPECT_FALSE(Manager.StartCamera(CamId));
     }
 
     TEST(CameraManagerTests, UnknownCameraCannotBeStarted)
     {
-        CameraManager manager(std::make_unique<NullCameraStreamFactory>());
+        CameraManager Manager(std::make_unique<NullCameraStreamFactory>());
 
-        EXPECT_FALSE(manager.StartCamera(999));
+        EXPECT_FALSE(Manager.StartCamera(999));
     }
 
     TEST(CameraManagerTests, StartedCameraCanBeStopped)
     {
-        CameraManager manager(std::make_unique<NullCameraStreamFactory>());
+        CameraManager Manager(std::make_unique<NullCameraStreamFactory>());
 
-        const std::uint64_t id = manager.AddCamera("Front Entrance", "rtsp://127.0.0.1/test");
+        const std::uint64_t CamId = Manager.AddCamera("Front Entrance", "rtsp://127.0.0.1/test");
 
-        ASSERT_NE(id, 0);
-        ASSERT_TRUE(manager.StartCamera(id));
-        EXPECT_TRUE(manager.StopCamera(id));
+        ASSERT_NE(CamId, 0);
+        ASSERT_TRUE(Manager.StartCamera(CamId));
+        EXPECT_TRUE(Manager.StopCamera(CamId));
 
-        const Camera* camera = manager.FindCamera(id);
+        const Camera* Camera = Manager.FindCamera(CamId);
 
-        ASSERT_NE(camera, nullptr);
+        ASSERT_NE(Camera, nullptr);
 
-        EXPECT_EQ(camera->State, ECameraState::Disconnected);
+        EXPECT_EQ(Camera->State, ECameraState::Disconnected);
     }
 
     TEST(CameraManagerTests, UnknownCameraCannotBeStopped)
     {
-        CameraManager manager(std::make_unique<NullCameraStreamFactory>());
+        CameraManager Manager(std::make_unique<NullCameraStreamFactory>());
 
-        EXPECT_FALSE(manager.StopCamera(999));
+        EXPECT_FALSE(Manager.StopCamera(999));
     }
 
     TEST(CameraManagerTests, RemovingCameraRemovesItsSession)
     {
-        CameraManager manager(std::make_unique<NullCameraStreamFactory>());
-        const std::uint64_t id = manager.AddCamera("Front Entrance", "rtsp://127.0.0.1/test");
+        CameraManager Manager(std::make_unique<NullCameraStreamFactory>());
+        const std::uint64_t CamId = Manager.AddCamera("Front Entrance", "rtsp://127.0.0.1/test");
 
-        ASSERT_NE(id, 0);
+        ASSERT_NE(CamId, 0);
 
-        ASSERT_TRUE(manager.RemoveCamera(id));
-        EXPECT_FALSE(manager.StartCamera(id));
-        EXPECT_FALSE(manager.StopCamera(id));
+        ASSERT_TRUE(Manager.RemoveCamera(CamId));
+        EXPECT_FALSE(Manager.StartCamera(CamId));
+        EXPECT_FALSE(Manager.StopCamera(CamId));
     }
 
     TEST(CameraManagerTests, FailedStreamCreationDoesNotAddCamera)
     {
-        CameraManager manager(std::make_unique<FailingCameraStreamFactory>());
-        const std::uint64_t id = manager.AddCamera("Front Entrance", "rtsp://127.0.0.1/test");
+        CameraManager Manager(std::make_unique<FailingCameraStreamFactory>());
+        const std::uint64_t CamId = Manager.AddCamera("Front Entrance", "rtsp://127.0.0.1/test");
 
-        EXPECT_EQ(id, 0);
-        EXPECT_EQ(manager.GetCameraCount(), 0);
+        EXPECT_EQ(CamId, 0);
+        EXPECT_EQ(Manager.GetCameraCount(), 0);
     }
 }

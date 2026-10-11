@@ -6,121 +6,121 @@ namespace Axiom::Tests
 {
     TEST(JsonValueTests, EmptyConstructorIsNullPointer)
     {
-        const JsonValue jsonValue;
-        EXPECT_EQ(jsonValue.IsNull(), true);
+        const JsonValue JsonValue;
+        EXPECT_EQ(JsonValue.IsNull(), true);
     }
 
     TEST(JsonValueTests, NullPointerConstructorIsNull)
     {
-        const JsonValue jsonValue(nullptr);
-        EXPECT_EQ(jsonValue.IsNull(), true);
+        const JsonValue JsonValue(nullptr);
+        EXPECT_EQ(JsonValue.IsNull(), true);
     }
 
     TEST(JsonValueTests, BooleanConstructorIsBoolean)
     {
-        const JsonValue jsonValue(true);
-        EXPECT_EQ(jsonValue.IsBoolean(), true);
+        const JsonValue JsonValue(true);
+        EXPECT_EQ(JsonValue.IsBoolean(), true);
     }
 
     TEST(JsonValueTests, Float32ConstructorIsNumber)
     {
-        const JsonValue jsonValue(1.0f);
-        EXPECT_EQ(jsonValue.IsNumber(), true);
+        const JsonValue JsonValue(1.0f);
+        EXPECT_EQ(JsonValue.IsNumber(), true);
     }
 
     TEST(JsonValueTests, Float64ConstructorIsNumber)
     {
-        const JsonValue jsonValue(1.0);
-        EXPECT_EQ(jsonValue.IsNumber(), true);
+        const JsonValue JsonValue(1.0);
+        EXPECT_EQ(JsonValue.IsNumber(), true);
     }
 
     TEST(JsonValueTests, StringConstructorIsString)
     {
-        const JsonValue jsonValue("test");
-        EXPECT_EQ(jsonValue.IsString(), true);
+        const JsonValue JsonValue("test");
+        EXPECT_EQ(JsonValue.IsString(), true);
     }
     
     TEST(JsonValueTests, ArrayConstructorIsArray)
     {
-        const JsonValue jsonValue(JsonArray{});
-        EXPECT_EQ(jsonValue.IsArray(), true);
+        const JsonValue JsonValue(JsonArray{});
+        EXPECT_EQ(JsonValue.IsArray(), true);
     }
 
     TEST(JsonValueTests, ObjectConstructorIsObject)
     {
-        const JsonValue jsonValue(JsonObject{});
+        const JsonValue JsonValue(JsonObject{});
 
-        EXPECT_EQ(jsonValue.IsObject(), true);
+        EXPECT_EQ(JsonValue.IsObject(), true);
     }
 
     TEST(JsonValueTests, AsBoolean)
     {
-        const JsonValue jsonValue(true);
+        const JsonValue JsonValue(true);
     
-        EXPECT_TRUE(jsonValue.AsBoolean());
+        EXPECT_TRUE(JsonValue.AsBoolean());
     }
     
     TEST(JsonValueTests, AsFloat32)
     {
-        const JsonValue jsonValue(1.0f);
+        const JsonValue JsonValue(1.0f);
     
-        EXPECT_FLOAT_EQ(jsonValue.AsFloat32(), 1.0f);
+        EXPECT_FLOAT_EQ(JsonValue.AsFloat32(), 1.0f);
     }
     
     TEST(JsonValueTests, AsFloat64)
     {
-        const JsonValue jsonValue(1.0);
+        const JsonValue JsonValue(1.0);
     
-        EXPECT_DOUBLE_EQ(jsonValue.AsFloat64(), 1.0);
+        EXPECT_DOUBLE_EQ(JsonValue.AsFloat64(), 1.0);
     }
     
     TEST(JsonValueTests, AsFString)
     {
-        const JsonValue jsonValue("test");
+        const JsonValue JsonValue("test");
     
-        EXPECT_EQ(jsonValue.AsFString(), "test");
+        EXPECT_EQ(JsonValue.AsFString(), "test");
     }
     
     TEST(JsonValueTests, AsArray)
     {
-        const JsonValue jsonValue(JsonArray{});
+        const JsonValue JsonValue(JsonArray{});
     
-        EXPECT_TRUE(jsonValue.AsArray().empty());
+        EXPECT_TRUE(JsonValue.AsArray().empty());
     }
     
     TEST(JsonValueTests, AsObject)
     {
-        JsonValue jsonValue(JsonObject{});
+        JsonValue JsonValue(JsonObject{});
     
-        EXPECT_TRUE(jsonValue.AsObject().empty());
+        EXPECT_TRUE(JsonValue.AsObject().empty());
     }
 
     TEST(JsonValueTests, AsArrayReturnsStoredValues)
     {
-        JsonArray array;
+        JsonArray Array;
 
-        array.emplace_back(true);
-        array.emplace_back(1.0);
-        array.emplace_back("test");
+        Array.emplace_back(true);
+        Array.emplace_back(1.0);
+        Array.emplace_back("test");
 
-        const JsonValue jsonValue(array);
+        const JsonValue JsonValue(Array);
 
-        EXPECT_EQ(jsonValue.AsArray().size(), 3);
-        EXPECT_EQ(jsonValue.AsArray()[0].AsBoolean(), true);
-        EXPECT_DOUBLE_EQ(jsonValue.AsArray()[1].AsFloat64(), 1.0);
-        EXPECT_EQ(jsonValue.AsArray()[2].AsFString(), "test");
+        EXPECT_EQ(JsonValue.AsArray().size(), 3);
+        EXPECT_EQ(JsonValue.AsArray()[0].AsBoolean(), true);
+        EXPECT_DOUBLE_EQ(JsonValue.AsArray()[1].AsFloat64(), 1.0);
+        EXPECT_EQ(JsonValue.AsArray()[2].AsFString(), "test");
     }
 
     TEST(JsonValueTests, AsObjectReturnsStoredValues)
     {
-        JsonObject object;
-        object.emplace("name", JsonValue("Front Entrance"));
+        JsonObject Object;
+        Object.emplace("name", JsonValue("Front Entrance"));
 
-        const JsonValue jsonValue(std::move(object));
+        const JsonValue JsonValue(std::move(Object));
 
-        const JsonObject& result = jsonValue.AsObject();
+        const JsonObject& Result = JsonValue.AsObject();
 
-        ASSERT_EQ(result.size(), 1);
-        EXPECT_EQ(result.at("name").AsFString(), "Front Entrance");
+        ASSERT_EQ(Result.size(), 1);
+        EXPECT_EQ(Result.at("name").AsFString(), "Front Entrance");
     }
 }

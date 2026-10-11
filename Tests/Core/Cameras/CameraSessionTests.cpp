@@ -23,6 +23,7 @@ namespace Axiom::Tests
                 }
 
                 Running_ = true;
+
                 return true;
             }
 
@@ -34,6 +35,7 @@ namespace Axiom::Tests
                 }
 
                 Running_ = false;
+
                 return true;
             }
 
@@ -55,140 +57,139 @@ namespace Axiom::Tests
 
     TEST(CameraSessionTests, StartConnectsCamera)
     {
-        Camera camera;
+        Camera Camera;
 
-        auto stream = std::make_unique<FakeCameraStream>();
+        auto Stream = std::make_unique<FakeCameraStream>();
 
-        const CameraSession session(camera, std::move(stream));
+        const CameraSession Session(Camera, std::move(Stream));
 
-        EXPECT_TRUE(session.Start());
-        EXPECT_EQ(camera.State, ECameraState::Connected);
-        EXPECT_TRUE(session.IsRunning());
+        EXPECT_TRUE(Session.Start());
+        EXPECT_EQ(Camera.State, ECameraState::Connected);
+        EXPECT_TRUE(Session.IsRunning());
     }
 
     TEST(CameraSessionTests, StartFailsWhenAlreadyConnecting)
     {
-        Camera camera;
-        camera.State = ECameraState::Connecting;
+        Camera Camera;
+        Camera.State = ECameraState::Connecting;
 
-        auto stream = std::make_unique<FakeCameraStream>();
+        auto Stream = std::make_unique<FakeCameraStream>();
 
-        const CameraSession session(camera, std::move(stream));
+        const CameraSession Session(Camera, std::move(Stream));
 
-        EXPECT_FALSE(session.Start());
-        EXPECT_EQ(camera.State, ECameraState::Connecting);
+        EXPECT_FALSE(Session.Start());
+        EXPECT_EQ(Camera.State, ECameraState::Connecting);
     }
 
     TEST(CameraSessionTests, StartFailsWhenAlreadyConnected)
     {
-        Camera camera;
-        camera.State = ECameraState::Connected;
+        Camera Camera;
+        Camera.State = ECameraState::Connected;
 
-        auto stream = std::make_unique<FakeCameraStream>();
+        auto Stream = std::make_unique<FakeCameraStream>();
 
-        const CameraSession session(camera, std::move(stream));
+        const CameraSession Session(Camera, std::move(Stream));
 
-        EXPECT_FALSE(session.Start());
-        EXPECT_EQ(camera.State, ECameraState::Connected);
+        EXPECT_FALSE(Session.Start());
+        EXPECT_EQ(Camera.State, ECameraState::Connected);
     }
 
     TEST(CameraSessionTests, FailedStreamStartSetsCameraError)
     {
-        Camera camera;
+        Camera Camera;
 
-        auto stream = std::make_unique<FakeCameraStream>();
-        stream->StartShouldFail = true;
+        auto Stream = std::make_unique<FakeCameraStream>();
+        Stream->StartShouldFail = true;
 
-        const CameraSession session(camera, std::move(stream));
+        const CameraSession Session(Camera, std::move(Stream));
 
-        EXPECT_FALSE(session.Start());
-        EXPECT_EQ(camera.State, ECameraState::Error);
-        EXPECT_FALSE(session.IsRunning());
+        EXPECT_FALSE(Session.Start());
+        EXPECT_EQ(Camera.State, ECameraState::Error);
+        EXPECT_FALSE(Session.IsRunning());
     }
 
     TEST(CameraSessionTests, StopDisconnectsCamera)
     {
-        Camera camera;
+        Camera Camera;
 
-        auto stream = std::make_unique<FakeCameraStream>();
+        auto Stream = std::make_unique<FakeCameraStream>();
 
-        const CameraSession session(camera, std::move(stream));
+        const CameraSession Session(Camera, std::move(Stream));
 
-        ASSERT_TRUE(session.Start());
+        ASSERT_TRUE(Session.Start());
 
-        EXPECT_TRUE(session.Stop());
-        EXPECT_EQ(camera.State, ECameraState::Disconnected);
-        EXPECT_FALSE(session.IsRunning());
+        EXPECT_TRUE(Session.Stop());
+        EXPECT_EQ(Camera.State, ECameraState::Disconnected);
+        EXPECT_FALSE(Session.IsRunning());
     }
 
     TEST(CameraSessionTests, StopFailsWhenAlreadyDisconnected)
     {
-        Camera camera;
-        camera.State = ECameraState::Disconnected;
+        Camera Camera;
+        Camera.State = ECameraState::Disconnected;
 
-        auto stream = std::make_unique<FakeCameraStream>();
+        auto Stream = std::make_unique<FakeCameraStream>();
 
-        const CameraSession session(camera,std::move(stream));
+        const CameraSession Session(Camera,std::move(Stream));
 
-        EXPECT_FALSE(session.Stop());
-        EXPECT_EQ(camera.State, ECameraState::Disconnected);
+        EXPECT_FALSE(Session.Stop());
+        EXPECT_EQ(Camera.State, ECameraState::Disconnected);
     }
 
     TEST(CameraSessionTests, StopFailsWhenCameraStateIsNone)
     {
-        Camera camera;
+        Camera Camera;
 
-        auto stream = std::make_unique<FakeCameraStream>();
+        auto Stream = std::make_unique<FakeCameraStream>();
 
-        const CameraSession session(camera, std::move(stream));
+        const CameraSession Session(Camera, std::move(Stream));
 
-        EXPECT_FALSE(session.Stop());
-        EXPECT_EQ(camera.State, ECameraState::None);
+        EXPECT_FALSE(Session.Stop());
+        EXPECT_EQ(Camera.State, ECameraState::None);
     }
 
     TEST(CameraSessionTests, FailedStreamStopSetsCameraError)
     {
-        Camera camera;
+        Camera Camera;
 
-        auto stream = std::make_unique<FakeCameraStream>();
-        FakeCameraStream* streamPtr = stream.get();
+        auto Stream = std::make_unique<FakeCameraStream>();
+        FakeCameraStream* StreamPtr = Stream.get();
 
-        const CameraSession session(camera, std::move(stream));
+        const CameraSession Session(Camera, std::move(Stream));
 
-        ASSERT_TRUE(session.Start());
+        ASSERT_TRUE(Session.Start());
 
-        streamPtr->StopShouldFail = true;
+        StreamPtr->StopShouldFail = true;
 
-        EXPECT_FALSE(session.Stop());
-        EXPECT_EQ(camera.State, ECameraState::Error);
-        EXPECT_TRUE(session.IsRunning());
+        EXPECT_FALSE(Session.Stop());
+        EXPECT_EQ(Camera.State, ECameraState::Error);
+        EXPECT_TRUE(Session.IsRunning());
     }
 
     TEST(CameraSessionTests, IsRunningReturnsTrueAfterStart)
     {
-        Camera camera;
+        Camera Camera;
 
-        auto stream = std::make_unique<FakeCameraStream>();
+        auto Stream = std::make_unique<FakeCameraStream>();
 
-        const CameraSession session(camera, std::move(stream));
+        const CameraSession Session(Camera, std::move(Stream));
 
-        ASSERT_TRUE(session.Start());
-
-        EXPECT_TRUE(session.IsRunning());
+        ASSERT_TRUE(Session.Start());
+        EXPECT_TRUE(Session.IsRunning());
     }
 
     TEST(CameraSessionTests, IsRunningReturnsFalseAfterStop)
     {
-        Camera camera;
+        Camera Camera;
 
-        auto stream = std::make_unique<FakeCameraStream>();
+        auto Stream = std::make_unique<FakeCameraStream>();
 
-        const CameraSession session(camera, std::move(stream));
+        const CameraSession Session(Camera, std::move(Stream));
 
-        ASSERT_TRUE(session.Start());
-        ASSERT_TRUE(session.Stop());
+        ASSERT_TRUE(Session.Start());
+        ASSERT_TRUE(Session.Stop());
 
-        EXPECT_FALSE(session.IsRunning());
+        EXPECT_FALSE(Session.IsRunning());
     }
 }
 

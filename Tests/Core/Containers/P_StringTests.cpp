@@ -8,15 +8,15 @@ namespace Axiom::Tests
 
     TEST(P_StringTests, DefaultConstructorContainsNullTerminator)
     {
-        const P_String string;
-        ASSERT_EQ(string.Size(), 1);
-        ASSERT_EQ(*string.Get(), L'\0');
+        const P_String String;
+        ASSERT_EQ(String.Size(), 1);
+        ASSERT_EQ(*String.Get(), L'\0');
     }
 
     TEST(P_StringTests, DefaultConstructedIsEmpty)
     {
-        const P_String string;
-        ASSERT_TRUE(string.IsEmpty());
+        const P_String String;
+        ASSERT_TRUE(String.IsEmpty());
     }
 
     TEST(P_StringTests, TCHARConstructor)
