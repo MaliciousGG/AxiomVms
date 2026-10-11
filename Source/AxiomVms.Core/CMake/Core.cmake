@@ -1,7 +1,9 @@
 target_sources(
         AxiomVms.Core
         PRIVATE
-        Private/Core/Containers/P_String.cpp
+        # Containers Core Implementation
+        Private/Core/Containers/FString.cpp
+
         # Json Core Implementation
         Private/Core/Json/JsonFile.cpp
         Private/Core/Json/JsonParser.cpp
@@ -21,7 +23,7 @@ target_sources(
         Public/CoreMinimal.h
 
         # Containers Core Headers
-        Public/Core/Containers/P_String.h
+        Public/Core/Containers/FString.h
         Public/Core/Containers/TArray.h
         Public/Core/Containers/TArray.inl
 

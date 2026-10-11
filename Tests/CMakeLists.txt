@@ -13,7 +13,7 @@ add_executable(
     AxiomVms.Tests
     Core/Cameras/CameraManagerTests.cpp
     Core/Cameras/CameraSessionTests.cpp
-        Core/Containers/P_StringTests.cpp
+        Core/Containers/FStringTests.cpp
     Core/Containers/TArrayTests.cpp
 
     Core/Json/JsonFileTests.cpp

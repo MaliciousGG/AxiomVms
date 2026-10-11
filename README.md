@@ -60,6 +60,8 @@ AxiomVms/
 │   │   │   │   ├── CameraManager.cpp
 │   │   │   │   └── CameraSession.cpp
 │   │   │   ├── Core/
+│   │   │   │   ├── Containers/
+│   │   │   │   │   └── FString.cpp
 │   │   │   │   ├── Json/
 │   │   │   │   │   ├── JsonParser.cpp
 │   │   │   │   │   └── JsonValue.cpp
@@ -76,6 +78,10 @@ AxiomVms/
 │   │   │   │   ├── CameraManager.h
 │   │   │   │   └── CameraSession.h
 │   │   │   ├── Core/
+│   │   │   │   ├── Containers/
+│   │   │   │   │   ├── FString.h
+│   │   │   │   │   ├── TArray.h
+│   │   │   │   │   └── TArray.inl
 │   │   │   │   ├── Json/
 │   │   │   │   │   ├── JsonParseError.h
 │   │   │   │   │   ├── JsonParser.h
@@ -83,7 +89,7 @@ AxiomVms/
 │   │   │   │   │   └── JsonValue.h
 │   │   │   │   ├── Logging/
 │   │   │   │   │   ├── ConsoleLogger.h
-│   │   │   │   │   ├── ILogger.h
+│   │   │   │   │   └── ILogger.h
 │   │   │   │   ├── Log.h
 │   │   │   │   └── LogLevel.h
 │   │   │   │   ├── Api.h
