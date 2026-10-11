@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include <Core/Types.h>
-#include "Core/Containers/TArray.h"
 
 #define P_STRING_MAX_LENGTH 1024
 
