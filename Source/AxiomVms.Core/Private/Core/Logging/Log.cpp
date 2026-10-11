@@ -6,9 +6,9 @@ namespace Axiom
 {
     std::unique_ptr<ILogger> Log::Logger_;
 
-    void Log::Configure(std::unique_ptr<ILogger> logger)
+    void Log::Configure(std::unique_ptr<ILogger> InLogger)
     {
-        if (!logger)
+        if (!InLogger)
         {
             throw std::invalid_argument("Logger cannot be null.");
         }
@@ -18,16 +18,16 @@ namespace Axiom
             throw std::logic_error("Logger has already been configured.");
         }
     
-        Logger_ = std::move(logger);
+        Logger_ = std::move(InLogger);
     }
 
-    void Log::Write(const ELogLevel level, const std::string_view message)
+    void Log::Write(const ELogLevel InLevel, const std::string_view InMessage)
     {
         if (!Logger_)
         {
             return;
         }
 
-        Logger_->Write(level, message);
+        Logger_->Write(InLevel, InMessage);
     }
 }

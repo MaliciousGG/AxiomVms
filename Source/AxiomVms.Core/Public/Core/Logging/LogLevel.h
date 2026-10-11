@@ -1,3 +1,5 @@
+#pragma once
+
 #include <cstdint>
 #include <string>
 
@@ -12,9 +14,9 @@ namespace Axiom
         Debug
     };
 
-    inline std::string ToString(ELogLevel level)
+    inline std::string ToString(const ELogLevel InLevel)
     {
-        switch (level)
+        switch (InLevel)
         {
             case ELogLevel::Fatal:
                 return "Fatal";

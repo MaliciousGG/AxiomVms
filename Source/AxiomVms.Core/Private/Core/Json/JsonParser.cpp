@@ -9,11 +9,11 @@
 
 namespace Axiom
 {
-    JsonValue JsonParser::Parse(const FString& input)
+    JsonValue JsonParser::Parse(const FString& Input)
     {
         Reset();
 
-        Input_ = input;
+        Input_ = Input;
 
         if (Input_.empty())
         {
@@ -29,7 +29,7 @@ namespace Axiom
 
         SkipWhitespace();
 
-        JsonValue value = ParseValue();
+        JsonValue Value = ParseValue();
 
         SkipWhitespace();
 
@@ -45,7 +45,7 @@ namespace Axiom
             return {};
         }
 
-        return value;
+        return Value;
     }
 
 
@@ -63,9 +63,9 @@ namespace Axiom
             return {};
         }
 
-        const TCHAR currentChar = Current();
+        const TCHAR CurrentChar = Current();
 
-        switch (currentChar)
+        switch (CurrentChar)
         {
             case '{':
                 return JsonValue(ParseObject());
@@ -88,13 +88,13 @@ namespace Axiom
                 break;
         }
 
-        if (currentChar == '-' || std::isdigit(static_cast<unsigned char>(currentChar)))
+        if (CurrentChar == '-' || std::isdigit(static_cast<unsigned char>(CurrentChar)))
         {
             return JsonValue(ParseNumber());
         }
 
         AddError({
-            .Message = FString("Unexpected character while parsing Json value: '") + currentChar + "'",
+            .Message = FString("Unexpected character while parsing Json value: '") + CurrentChar + "'",
             .Location = Location_
         });
 
@@ -104,7 +104,7 @@ namespace Axiom
 
     JsonObject JsonParser::ParseObject()
     {
-        JsonObject object;
+        JsonObject Object;
 
         Next();
 
@@ -114,7 +114,7 @@ namespace Axiom
         {
             Next();
 
-            return object;
+            return Object;
         }
 
         while (!IsAtEnd())
@@ -130,7 +130,7 @@ namespace Axiom
                 return {};
             }
 
-            const FString key = ParseString();
+            const FString Key = ParseString();
 
             SkipWhitespace();
 
@@ -147,14 +147,14 @@ namespace Axiom
 
             SkipWhitespace();
 
-            JsonValue value = ParseValue();
+            const JsonValue Value = ParseValue();
 
             if (!Errors_.empty())
             {
                 return {};
             }
 
-            object[key] = value;
+            Object[Key] = Value;
 
             SkipWhitespace();
 
@@ -162,7 +162,7 @@ namespace Axiom
             {
                 Next();
 
-                return object;
+                return Object;
             }
 
             if (Current() != ',')
@@ -191,7 +191,7 @@ namespace Axiom
 
     JsonArray JsonParser::ParseArray()
     {
-        JsonArray array;
+        JsonArray Array;
 
         Next();
 
@@ -201,19 +201,19 @@ namespace Axiom
         {
             Next();
 
-            return array;
+            return Array;
         }
 
         while (!IsAtEnd())
         {
-            JsonValue value = ParseValue();
+            JsonValue Value = ParseValue();
 
             if (!Errors_.empty())
             {
                 return {};
             }
 
-            array.emplace_back(value);
+            Array.emplace_back(Value);
 
             SkipWhitespace();
 
@@ -221,7 +221,7 @@ namespace Axiom
             {
                 Next();
 
-                return array;
+                return Array;
             }
 
             if (Current() != ',')
@@ -250,7 +250,7 @@ namespace Axiom
 
     FString JsonParser::ParseString()
     {
-        FString result;
+        FString Result;
 
         if (Current() != '"')
         {
@@ -266,14 +266,14 @@ namespace Axiom
 
         while (!IsAtEnd())
         {
-            const TCHAR currentChar = Next();
+            const TCHAR CurrentChar = Next();
 
-            if (currentChar == '"')
+            if (CurrentChar == '"')
             {
-                return result;
+                return Result;
             }
 
-            if (currentChar == '\\')
+            if (CurrentChar == '\\')
             {
                 if (IsAtEnd())
                 {
@@ -285,43 +285,43 @@ namespace Axiom
                     return {};
                 }
 
-                switch (const TCHAR escapedChar = Next())
+                switch (const TCHAR EscapedChar = Next())
                 {
                     case '"':
-                        result += '"';
+                        Result += '"';
                         break;
 
                     case '\\':
-                        result += '\\';
+                        Result += '\\';
                         break;
 
                     case '/':
-                        result += '/';
+                        Result += '/';
                         break;
 
                     case 'b':
-                        result += '\b';
+                        Result += '\b';
                         break;
 
                     case 'f':
-                        result += '\f';
+                        Result += '\f';
                         break;
 
                     case 'n':
-                        result += '\n';
+                        Result += '\n';
                         break;
 
                     case 'r':
-                        result += '\r';
+                        Result += '\r';
                         break;
 
                     case 't':
-                        result += '\t';
+                        Result += '\t';
                         break;
 
                     default:
                         AddError({
-                            .Message = FString("Invalid escape sequence: \\") + escapedChar,
+                            .Message = FString("Invalid escape sequence: \\") + EscapedChar,
                             .Location = Location_
                         });
 
@@ -331,7 +331,7 @@ namespace Axiom
                 continue;
             }
 
-            if (currentChar == '\n' || currentChar == '\r')
+            if (CurrentChar == '\n' || CurrentChar == '\r')
             {
                 AddError({
                     .Message = "Unescaped newline in Json string",
@@ -341,7 +341,7 @@ namespace Axiom
                 return {};
             }
 
-            result += currentChar;
+            Result += CurrentChar;
         }
 
         AddError({
@@ -355,7 +355,7 @@ namespace Axiom
 
     float64 JsonParser::ParseNumber()
     {
-        const Size_T start = Location_.Offset;
+        const Size_T Start = Location_.Offset;
 
         if (Current() == '-')
         {
@@ -388,8 +388,7 @@ namespace Axiom
                 return {};
             }
 
-            while (!IsAtEnd() &&
-                   std::isdigit(static_cast<unsigned char>(Current())))
+            while (!IsAtEnd() && std::isdigit(static_cast<unsigned char>(Current())))
             {
                 Next();
             }
@@ -440,11 +439,11 @@ namespace Axiom
             }
         }
 
-        const Size_T length = Location_.Offset - start;
+        const Size_T Length = Location_.Offset - Start;
 
-        const FString numberString{Input_.substr(start, length)};
+        const FString NumberString{Input_.substr(Start, Length)};
 
-        return std::strtod(numberString.c_str(), nullptr);
+        return std::strtod(NumberString.c_str(), nullptr);
     }
 
 
@@ -537,11 +536,11 @@ namespace Axiom
             return {};
         }
 
-        const TCHAR currentChar = Input_[Location_.Offset];
+        const TCHAR CurrentChar = Input_[Location_.Offset];
 
         ++Location_.Offset;
 
-        if (currentChar == '\n')
+        if (CurrentChar == '\n')
         {
             ++Location_.Line;
             Location_.Column = 1;
@@ -551,7 +550,7 @@ namespace Axiom
             ++Location_.Column;
         }
 
-        return currentChar;
+        return CurrentChar;
     }
 
 
@@ -588,21 +587,21 @@ namespace Axiom
 
         AXIOM_LOG_ERROR("AxiomVms encountered {} errors while parsing Json: {}", Errors_.size(), Input_);
 
-        for (const JsonParseError& error : Errors_)
+        for (const auto& [Message, Location] : Errors_)
         {
-            AXIOM_LOG_ERROR("Error at line {} column {}: {}", error.Location.Line, error.Location.Column, error.Message);
+            AXIOM_LOG_ERROR("Error at line {} column {}: {}", Location.Line, Location.Column, Message);
         }
     }
 
 
-    void JsonParser::AddError(const JsonParseError& error)
+    void JsonParser::AddError(const JsonParseError& Error)
     {
-        if (error.Message.empty())
+        if (Error.Message.empty())
         {
             return;
         }
 
-        Errors_.emplace_back(error);
+        Errors_.emplace_back(Error);
     }
 
 

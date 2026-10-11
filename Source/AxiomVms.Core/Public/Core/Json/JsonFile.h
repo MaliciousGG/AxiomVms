@@ -12,13 +12,13 @@ namespace Axiom
         JsonFile() = default;
 
         [[nodiscard]]
-        bool Load(const std::filesystem::path& path, FString& error);
+        bool Load(const std::filesystem::path& Path, FString& Error);
 
         [[nodiscard]]
         const JsonValue& GetRoot() const;
 
     private:
-        static bool ReadJson(const std::filesystem::path& path, FString& text, FString& error);
+        static bool ReadJson(const std::filesystem::path& Path, FString& Text, FString& Error);
 
         JsonValue Root_;
     };

@@ -12,6 +12,6 @@ namespace Axiom
     public:
         virtual ~ICameraStreamFactory() = default;
 
-        virtual std::unique_ptr<ICameraStream> CreateCameraStream(const Camera& camera) = 0;
+        virtual std::unique_ptr<ICameraStream> CreateCameraStream(const Camera& InCamera) = 0;
     };
 }

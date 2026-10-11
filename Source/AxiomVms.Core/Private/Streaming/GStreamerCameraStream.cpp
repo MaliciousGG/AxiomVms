@@ -11,8 +11,8 @@
 
 namespace Axiom
 {
-    GStreamerCameraStream::GStreamerCameraStream(std::string streamUrl)
-        : StreamUrl_(std::move(streamUrl))
+    GStreamerCameraStream::GStreamerCameraStream(std::string InStreamUrl)
+        : StreamUrl_(std::move(InStreamUrl))
     {
         gst_init(nullptr, nullptr);
     }
@@ -25,29 +25,29 @@ namespace Axiom
 
     bool GStreamerCameraStream::Start()
     {
-        std::scoped_lock lock(Mutex_);
+        std::scoped_lock ScopeLock(Mutex_);
 
         if (Running_)
         {
             return false;
         }
 
-        GError* error = nullptr;
+        GError* Error = nullptr;
 
-        const std::string pipelineDescription =
+        const std::string PipelineDescription =
             "rtspsrc location=\"" + StreamUrl_ +
             "\" latency=200 "
             "! rtph264depay "
             "! h264parse "
             "! fakesink";
 
-        Pipeline_ = gst_parse_launch(pipelineDescription.c_str(), &error);
+        Pipeline_ = gst_parse_launch(PipelineDescription.c_str(), &Error);
 
-        if (error != nullptr)
+        if (Error != nullptr)
         {
-            AXIOM_LOG_ERROR("Failed to parse GStreamer pipeline for '{}': {}", StreamUrl_, error->message);
+            AXIOM_LOG_ERROR("Failed to parse GStreamer pipeline for '{}': {}", StreamUrl_, Error->message);
 
-            g_clear_error(&error);
+            g_clear_error(&Error);
         }
 
         if (Pipeline_ == nullptr)
@@ -62,12 +62,12 @@ namespace Axiom
             AXIOM_LOG_ERROR("Failed to acquire GStreamer bus for '{}'.", StreamUrl_);
 
             Cleanup();
+
             return false;
         }
 
-        const GstStateChangeReturn result = gst_element_set_state(Pipeline_, GST_STATE_PLAYING);
-
-        if (result == GST_STATE_CHANGE_FAILURE)
+        if (const GstStateChangeReturn Result = gst_element_set_state(Pipeline_, GST_STATE_PLAYING);
+            Result == GST_STATE_CHANGE_FAILURE)
         {
             AXIOM_LOG_ERROR("Failed to start GStreamer pipeline for '{}'.", StreamUrl_);
 
@@ -77,11 +77,10 @@ namespace Axiom
 
         Running_ = true;
 
-        BusThread_ = std::jthread(
-            [this](const std::stop_token &stopToken)
-            {
-                BusWorker(stopToken);
-            });
+        BusThread_ = std::jthread([this](const std::stop_token &StopToken)
+        {
+                BusWorker(StopToken);
+        });
 
         AXIOM_LOG_INFO("GStreamer pipeline starting for '{}'.", StreamUrl_);
 
@@ -101,7 +100,7 @@ namespace Axiom
             BusThread_.join();
         }
 
-        std::scoped_lock lock(Mutex_);
+        std::scoped_lock ScopeLock(Mutex_);
 
         Running_ = false;
 
@@ -117,51 +116,52 @@ namespace Axiom
         return Running_.load();
     }
 
-    void GStreamerCameraStream::BusWorker(const std::stop_token &stopToken)
+    void GStreamerCameraStream::BusWorker(const std::stop_token &StopToken)
     {
-        GstBus* bus = nullptr;
+        GstBus* Bus = nullptr;
 
         {
-            std::scoped_lock lock(Mutex_);
+            std::scoped_lock ScopeLock(Mutex_);
 
             if (Bus_ == nullptr)
             {
                 Running_ = false;
+
                 return;
             }
 
-            bus = GST_BUS(gst_object_ref(Bus_));
+            Bus = GST_BUS(gst_object_ref(Bus_));
         }
 
-        while (!stopToken.stop_requested())
+        while (!StopToken.stop_requested())
         {
-            GstMessage* message = gst_bus_timed_pop(bus, 100 * GST_MSECOND);
+            GstMessage* Message = gst_bus_timed_pop(Bus, 100 * GST_MSECOND);
 
-            if (message == nullptr)
+            if (Message == nullptr)
             {
                 continue;
             }
 
-            const bool keepRunning = ProcessBusMessage(message);
+            const bool KeepRunning = ProcessBusMessage(Message);
 
-            gst_message_unref(message);
+            gst_message_unref(Message);
 
-            if (!keepRunning)
+            if (!KeepRunning)
             {
                 break;
             }
         }
 
-        gst_object_unref(bus);
+        gst_object_unref(Bus);
     }
 
-    bool GStreamerCameraStream::ProcessBusMessage(GstMessage* message)
+    bool GStreamerCameraStream::ProcessBusMessage(GstMessage* InMessage)
     {
-        switch (GST_MESSAGE_TYPE(message))
+        switch (GST_MESSAGE_TYPE(InMessage))
         {
             case GST_MESSAGE_ERROR:
             {
-                PrintBusError(message);
+                PrintBusError(InMessage);
 
                 Running_ = false;
 
@@ -179,32 +179,32 @@ namespace Axiom
 
             case GST_MESSAGE_STATE_CHANGED:
             {
-                GstElement* pipeline = nullptr;
+                GstElement* Pipeline = nullptr;
 
                 {
-                    std::scoped_lock lock(Mutex_);
-                    pipeline = Pipeline_;
+                    std::scoped_lock ScopeLock(Mutex_);
+                    Pipeline = Pipeline_;
                 }
 
-                if (pipeline != nullptr &&GST_MESSAGE_SRC(message) == GST_OBJECT(pipeline))
+                if (Pipeline != nullptr && GST_MESSAGE_SRC(InMessage) == GST_OBJECT(Pipeline))
                 {
-                    GstState oldState;
-                    GstState newState;
-                    GstState pendingState;
+                    GstState OldState;
+                    GstState NewState;
+                    GstState PendingState;
 
                     gst_message_parse_state_changed(
-                        message,
-                        &oldState,
-                        &newState,
-                        &pendingState);
+                        InMessage,
+                        &OldState,
+                        &NewState,
+                        &PendingState);
 
                     AXIOM_LOG_DEBUG(
                         "Pipeline '{}' changed state from {} to {}.",
                         StreamUrl_,
-                        gst_element_state_get_name(oldState),
-                        gst_element_state_get_name(newState));
+                        gst_element_state_get_name(OldState),
+                        gst_element_state_get_name(NewState));
 
-                    if (newState == GST_STATE_PLAYING)
+                    if (NewState == GST_STATE_PLAYING)
                     {
                         AXIOM_LOG_INFO("Camera stream '{}' reached PLAYING.", StreamUrl_);
                     }
@@ -220,25 +220,25 @@ namespace Axiom
         return Running_;
     }
 
-    void GStreamerCameraStream::PrintBusError(GstMessage* message)
+    void GStreamerCameraStream::PrintBusError(GstMessage* InMessage)
     {
-        GError* error = nullptr;
-        gchar* debugInfo = nullptr;
+        GError* Error = nullptr;
+        gchar* DebugInfo = nullptr;
 
-        gst_message_parse_error( message,&error, &debugInfo);
+        gst_message_parse_error(InMessage, &Error, &DebugInfo);
 
         AXIOM_LOG_ERROR(
             "GStreamer error from '{}': {}",
-            GST_OBJECT_NAME(message->src),
-            error != nullptr ? error->message : "Unknown error");
+            GST_OBJECT_NAME(InMessage->src),
+            Error != nullptr ? Error->message : "Unknown error");
 
-        if (debugInfo != nullptr)
+        if (DebugInfo != nullptr)
         {
-            AXIOM_LOG_DEBUG("GStreamer debug information: {}", debugInfo);
+            AXIOM_LOG_DEBUG("GStreamer debug information: {}", DebugInfo);
         }
 
-        g_clear_error(&error);
-        g_free(debugInfo);
+        g_clear_error(&Error);
+        g_free(DebugInfo);
     }
 
     void GStreamerCameraStream::Cleanup()

@@ -14,7 +14,7 @@ namespace Axiom
     class GStreamerCameraStream final : public ICameraStream
     {
     public:
-        explicit GStreamerCameraStream(std::string streamUrl);
+        explicit GStreamerCameraStream(std::string InStreamUrl);
         ~GStreamerCameraStream() override;
 
         bool Start() override;
@@ -24,11 +24,11 @@ namespace Axiom
         bool IsRunning() const override;
 
     private:
-        void BusWorker(const std::stop_token &stopToken);
+        void BusWorker(const std::stop_token &StopToken);
 
-        bool ProcessBusMessage(GstMessage* message);
+        bool ProcessBusMessage(GstMessage* InMessage);
 
-        static void PrintBusError(GstMessage* message);
+        static void PrintBusError(GstMessage* InMessage);
 
         void Cleanup();
 

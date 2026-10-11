@@ -9,14 +9,14 @@ namespace Axiom
     public:
         ConsoleLogger() = default;
 
-        explicit ConsoleLogger(ELogLevel level)
-            : LogLevel_(level)
+        explicit ConsoleLogger(ELogLevel InLevel)
+            : LogLevel_(InLevel)
         {}
 
-        void Write(ELogLevel level, std::string_view message) override;
+        void Write(ELogLevel InLevel, std::string_view InMessage) override;
 
-        bool ShouldLog(ELogLevel level) const override;
-        void SetLevel(ELogLevel level) override;
+        bool ShouldLog(ELogLevel InLevel) const override;
+        void SetLevel(ELogLevel InLevel) override;
 
     private:
         ELogLevel LogLevel_{ELogLevel::Info};

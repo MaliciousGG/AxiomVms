@@ -5,9 +5,9 @@
 
 namespace Axiom
 {
-    std::unique_ptr<ICameraStream> NullCameraStreamFactory::CreateCameraStream(const Camera& camera)
+    std::unique_ptr<ICameraStream> NullCameraStreamFactory::CreateCameraStream(const Camera& InCamera)
     {
-        static_cast<void>(camera);
+        static_cast<void>(InCamera);
 
         return std::make_unique<NullCameraStream>();
     }

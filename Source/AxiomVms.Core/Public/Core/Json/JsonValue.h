@@ -29,13 +29,13 @@ namespace Axiom
         JsonValue();
 
         explicit JsonValue(std::nullptr_t);
-        explicit JsonValue(bool value);
-        explicit JsonValue(float32 value);
-        explicit JsonValue(float64 value);
-        explicit JsonValue(FString value);
-        explicit JsonValue(const TCHAR* value);
-        explicit JsonValue(JsonArray value);
-        explicit JsonValue(JsonObject value);
+        explicit JsonValue(bool Value);
+        explicit JsonValue(float32 Value);
+        explicit JsonValue(float64 Value);
+        explicit JsonValue(FString Value);
+        explicit JsonValue(const TCHAR* Value);
+        explicit JsonValue(JsonArray Value);
+        explicit JsonValue(JsonObject Value);
 
         bool AsBoolean() const;
 
@@ -65,9 +65,9 @@ namespace Axiom
         JsonVariant Value_;
     };
 
-    constexpr std::string_view ToString(EJsonValueType type)
+    constexpr std::string_view ToString(const EJsonValueType Type)
     {
-        switch (type)
+        switch (Type)
         {
             case EJsonValueType::Null:    return "Null";
             case EJsonValueType::Boolean: return "Boolean";

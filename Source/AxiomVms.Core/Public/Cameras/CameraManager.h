@@ -15,24 +15,24 @@ namespace Axiom
     class CameraManager
     {
     public:
-        explicit CameraManager(std::unique_ptr<ICameraStreamFactory> streamFactory);
+        explicit CameraManager(std::unique_ptr<ICameraStreamFactory> InStreamFactory);
 
         ~CameraManager();
 
-        std::uint64_t AddCamera(std::string name, std::string streamUrl);
+        std::uint64_t AddCamera(std::string InCameraName, std::string InStreamUrl);
 
-        bool RemoveCamera(std::uint64_t id);
+        bool RemoveCamera(std::uint64_t OutCameraName);
 
-        Camera* FindCamera(std::uint64_t id);
-        const Camera* FindCamera(std::uint64_t id) const;
+        Camera* FindCamera(std::uint64_t CameraId);
+        const Camera* FindCamera(std::uint64_t CameraId) const;
 
-        Camera* FindCamera(const std::string& name);
-        const Camera* FindCamera(const std::string& name) const;
+        Camera* FindCamera(const std::string& CameraName);
+        const Camera* FindCamera(const std::string& CameraName) const;
         
         std::size_t GetCameraCount() const;
 
-        bool StartCamera(std::uint64_t id);
-        bool StopCamera(std::uint64_t id);
+        bool StartCamera(std::uint64_t CameraId);
+        bool StopCamera(std::uint64_t CameraId);
 
     private:
         std::uint64_t NextCameraId();

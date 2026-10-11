@@ -11,10 +11,10 @@ namespace Axiom
     public:
         virtual ~ILogger() = default;
 
-        virtual void Write(ELogLevel level, std::string_view message) = 0;
+        virtual void Write(ELogLevel InLevel, std::string_view InMessage) = 0;
 
     protected:
-        virtual bool ShouldLog(ELogLevel level) const = 0;
-        virtual void SetLevel(ELogLevel level) = 0;
+        virtual bool ShouldLog(ELogLevel InLevel) const = 0;
+        virtual void SetLevel(ELogLevel InLevel) = 0;
     };
 }

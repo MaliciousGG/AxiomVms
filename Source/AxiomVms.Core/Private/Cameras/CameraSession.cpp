@@ -3,9 +3,9 @@
 namespace Axiom
 {
     
-    CameraSession::CameraSession(Camera& camera, std::unique_ptr<ICameraStream> stream)
-        : Camera_(camera)
-        , Stream_(std::move(stream))
+    CameraSession::CameraSession(Camera& InCamera, std::unique_ptr<ICameraStream> InStream)
+        : Camera_(InCamera)
+        , Stream_(std::move(InStream))
     {}
 
     bool CameraSession::Start() const

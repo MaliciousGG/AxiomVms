@@ -12,40 +12,40 @@ namespace Axiom
     class Log
     {
     public:
-        static void Configure(std::unique_ptr<ILogger> logger);
+        static void Configure(std::unique_ptr<ILogger> InLogger);
 
         template<typename... Args>
-        static void Debug(std::format_string<Args...> format,Args&&... args)
+        static void Debug(std::format_string<Args...> Format, Args&&... InArgs)
         {
-            Write(ELogLevel::Debug,std::format(format, std::forward<Args>(args)...));
+            Write(ELogLevel::Debug, std::format(Format, std::forward<Args>(InArgs)...));
         }
 
         template<typename... Args>
-        static void Info(std::format_string<Args...> format,Args&&... args)
+         static void Info(std::format_string<Args...> Format, Args&&... InArgs)
         {
-            Write(ELogLevel::Info,std::format(format, std::forward<Args>(args)...));
+            Write(ELogLevel::Info, std::format(Format, std::forward<Args>(InArgs)...));
         }
 
         template<typename... Args>
-        static void Warning(std::format_string<Args...> format,Args&&... args)
+        static void Warning(std::format_string<Args...> Format, Args&&... InArgs)
         {
-            Write(ELogLevel::Warning,std::format(format, std::forward<Args>(args)...));
+            Write(ELogLevel::Warning, std::format(Format, std::forward<Args>(InArgs)...));
         }
 
         template<typename... Args>
-        static void Error(std::format_string<Args...> format,Args&&... args)
+        static void Error(std::format_string<Args...> Format, Args&&... InArgs)
         {
-            Write(ELogLevel::Error,std::format(format, std::forward<Args>(args)...));
+            Write(ELogLevel::Error, std::format(Format, std::forward<Args>(InArgs)...));
         }
 
         template<typename... Args>
-        static void Fatal(std::format_string<Args...> format, Args&&... args)
+        static void Fatal(std::format_string<Args...> Format, Args&&... InArgs)
         {
-            Write(ELogLevel::Fatal, std::format(format, std::forward<Args>(args)...));
+            Write(ELogLevel::Fatal, std::format(Format, std::forward<Args>(InArgs)...));
         }
 
     private:
-        static void Write(ELogLevel level, std::string_view message);
+        static void Write(ELogLevel InLevel, std::string_view InMessage);
 
         static std::unique_ptr<ILogger> Logger_;
     };

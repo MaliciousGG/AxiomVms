@@ -6,26 +6,26 @@
 
 namespace Axiom
 {
-    bool JsonFile::Load(const std::filesystem::path& path, FString& error)
+    bool JsonFile::Load(const std::filesystem::path& Path, FString& Error)
     {
-        FString text;
+        FString Text;
 
-        if (!ReadJson(path, text, error))
+        if (!ReadJson(Path, Text, Error))
         {
             return false;
         }
 
-        JsonParser parser;
-        JsonValue parsedRoot = parser.Parse(text);
+        JsonParser Parser;
+        JsonValue ParsedRoot = Parser.Parse(Text);
 
-        if (const TArray<JsonParseError> errors = parser.GetErrors(); !errors.empty())
+        if (const TArray<JsonParseError> Errors = Parser.GetErrors(); !Errors.empty())
         {
-            error = errors[0].Message;
+            Error = Errors[0].Message;
 
             return false;
         }
 
-        Root_ = std::move(parsedRoot);
+        Root_ = std::move(ParsedRoot);
 
         return true;
     }
@@ -35,31 +35,32 @@ namespace Axiom
         return Root_;
     }
 
-    bool JsonFile::ReadJson(const std::filesystem::path& path, FString& text, FString& error)
+    bool JsonFile::ReadJson(const std::filesystem::path& Path, FString& Text, FString& Error)
     {
-        text.clear();
-        error.clear();
+        Text.clear();
+        Error.clear();
 
-        std::ifstream file(path, std::ios::binary);
+        std::ifstream File(Path, std::ios::binary);
 
-        if (!file.is_open())
+        if (!File.is_open())
         {
-            error = "Failed to open file: " + path.string();
+            Error = "Failed to open file: " + Path.string();
 
             return false;
         }
 
-        std::ostringstream buffer;
+        std::ostringstream Buffer;
 
-        buffer << file.rdbuf();
+        Buffer << File.rdbuf();
 
-        if (file.bad())
+        if (File.bad())
         {
-            error = "Failed to read JSON file.";
+            Error = "Failed to read JSON file.";
+
             return false;
         }
 
-        text = buffer.str();
+        Text = Buffer.str();
 
         return true;
     }

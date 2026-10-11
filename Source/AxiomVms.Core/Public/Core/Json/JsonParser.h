@@ -13,7 +13,7 @@ namespace Axiom
         using JsonObject = TMap<FString, JsonValue>;
     
     public:
-        JsonValue Parse(const FString& input);
+        JsonValue Parse(const FString& Input);
     
         JsonValue ParseValue();
     
@@ -47,7 +47,7 @@ namespace Axiom
 
         void Reset();
         void LogErrors();
-        void AddError(const JsonParseError& error);
+        void AddError(const JsonParseError& Error);
     
     private:
         std::string_view Input_{};

@@ -10,7 +10,7 @@ namespace Axiom
     class CameraSession
     {
     public:
-        explicit CameraSession(Camera& camera,  std::unique_ptr<ICameraStream> stream);
+        explicit CameraSession(Camera& InCamera,  std::unique_ptr<ICameraStream> InStream);
 
         [[nodiscard]]
         bool Start() const;

@@ -15,45 +15,45 @@ namespace Axiom
     {
     }
 
-    JsonValue::JsonValue(bool value) 
+    JsonValue::JsonValue(bool Value)
         : ValueType_(EJsonValueType::Boolean)
-        , Value_(value)
+        , Value_(Value)
     {
     }
 
-    JsonValue::JsonValue(float32 value) 
+    JsonValue::JsonValue(float32 Value)
         : ValueType_(EJsonValueType::Number)
-        , Value_(value)
+        , Value_(Value)
     {
     }
 
-    JsonValue::JsonValue(float64 value) 
+    JsonValue::JsonValue(float64 Value)
         : ValueType_(EJsonValueType::Number)
-        , Value_(value)
+        , Value_(Value)
     {
     }
 
-    JsonValue::JsonValue(FString value) 
+    JsonValue::JsonValue(FString Value)
         : ValueType_(EJsonValueType::String)
-        , Value_(std::move(value))
+        , Value_(std::move(Value))
     {
     }
 
-    JsonValue::JsonValue(const TCHAR* value)
+    JsonValue::JsonValue(const TCHAR* Value)
         : ValueType_(EJsonValueType::String)
-        , Value_(std::move(FString(value)))
+        , Value_(std::move(FString(Value)))
     {
     }
 
-    JsonValue::JsonValue(JsonArray value) 
+    JsonValue::JsonValue(JsonArray Value)
         : ValueType_(EJsonValueType::Array)
-        , Value_(std::move(value))
+        , Value_(std::move(Value))
     {
     }
 
-    JsonValue::JsonValue(JsonObject value) 
+    JsonValue::JsonValue(JsonObject Value)
         : ValueType_(EJsonValueType::Object)
-        , Value_(std::move(value))
+        , Value_(std::move(Value))
     {
     }
 
