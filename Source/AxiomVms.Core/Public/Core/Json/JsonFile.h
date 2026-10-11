@@ -4,7 +4,7 @@
 
 #include "JsonValue.h"
 
-namespace AxiomVms
+namespace Axiom
 {
     class JsonFile
     {

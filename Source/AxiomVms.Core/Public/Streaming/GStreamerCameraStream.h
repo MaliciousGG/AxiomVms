@@ -9,7 +9,7 @@
 #include <string>
 #include <thread>
 
-namespace AxiomVms
+namespace Axiom
 {
     class GStreamerCameraStream final : public ICameraStream
     {

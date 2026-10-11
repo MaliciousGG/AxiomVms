@@ -2,7 +2,7 @@
 
 #include "Core/Json/JsonValue.h"
 
-namespace AxiomVms::Tests
+namespace Axiom::Tests
 {
     TEST(JsonValueTests, EmptyConstructorIsNullPointer)
     {

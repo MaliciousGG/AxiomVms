@@ -3,7 +3,7 @@
 #include "Core/Json/JsonSourceLocation.h"
 #include "Core/Types.h"
 
-namespace AxiomVms
+namespace Axiom
 {
     struct JsonParseError
     {

@@ -1,6 +1,6 @@
 #include "Cameras/CameraSession.h"
 
-namespace AxiomVms
+namespace Axiom
 {
     
     CameraSession::CameraSession(Camera& camera, std::unique_ptr<ICameraStream> stream)

@@ -10,10 +10,10 @@
 
 
 namespace {
-    class FailingCameraStreamFactory final : public AxiomVms::ICameraStreamFactory
+    class FailingCameraStreamFactory final : public Axiom::ICameraStreamFactory
     {
     public:
-        std::unique_ptr<AxiomVms::ICameraStream> CreateCameraStream(const AxiomVms::Camera& camera) override
+        std::unique_ptr<Axiom::ICameraStream> CreateCameraStream(const Axiom::Camera& camera) override
         {
             static_cast<void>(camera);
 
@@ -22,7 +22,7 @@ namespace {
     };
 }
 
-namespace AxiomVms::Tests
+namespace Axiom::Tests
 {
 
     TEST(CameraManagerTests, AddCameraIncreasesCameraCount)

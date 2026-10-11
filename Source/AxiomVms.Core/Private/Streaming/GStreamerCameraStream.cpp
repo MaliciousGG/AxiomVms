@@ -9,7 +9,7 @@
 #include <thread>
 #include <utility>
 
-namespace AxiomVms
+namespace Axiom
 {
     GStreamerCameraStream::GStreamerCameraStream(std::string streamUrl)
         : StreamUrl_(std::move(streamUrl))

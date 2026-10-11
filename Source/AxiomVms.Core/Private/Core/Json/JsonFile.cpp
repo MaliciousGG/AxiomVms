@@ -4,7 +4,7 @@
 
 #include "Core/Json/JsonParser.h"
 
-namespace AxiomVms
+namespace Axiom
 {
     bool JsonFile::Load(const std::filesystem::path& path, FString& error)
     {

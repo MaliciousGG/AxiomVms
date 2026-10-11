@@ -4,7 +4,7 @@
 #include "CoreMinimal.h"
 #include "Core/Json/JsonFile.h"
 
-namespace AxiomVms::Tests
+namespace Axiom::Tests
 {
     TEST(JsonFileTests, JsonFileContainsExpectedData_1)
     {

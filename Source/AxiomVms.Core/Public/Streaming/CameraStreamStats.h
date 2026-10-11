@@ -3,7 +3,7 @@
 #include <chrono>
 #include <cstdint>
 
-namespace AxiomVms
+namespace Axiom
 {
     struct CameraStreamStats
     {

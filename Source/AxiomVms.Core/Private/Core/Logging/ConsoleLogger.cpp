@@ -3,7 +3,7 @@
 #include <chrono>
 #include <iostream>
 
-namespace AxiomVms
+namespace Axiom
 {
     void ConsoleLogger::Write(const ELogLevel level, const std::string_view message)
     {

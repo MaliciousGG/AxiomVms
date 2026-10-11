@@ -2,7 +2,7 @@
 
 #include "Streaming/ICameraStreamFactory.h"
 
-namespace AxiomVms
+namespace Axiom
 {
     class GStreamerCameraStreamFactory final : public ICameraStreamFactory
     {

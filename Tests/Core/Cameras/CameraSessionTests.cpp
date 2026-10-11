@@ -6,7 +6,7 @@
 
 #include <memory>
 
-namespace AxiomVms::Tests
+namespace Axiom::Tests
 {
     namespace {
         class FakeCameraStream final : public ICameraStream

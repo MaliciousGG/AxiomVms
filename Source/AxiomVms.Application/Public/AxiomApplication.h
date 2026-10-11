@@ -4,7 +4,7 @@
 
 #include "Cameras/CameraManager.h"
 
-using namespace AxiomVms;
+using namespace Axiom;
 
 class AxiomApplication
 {

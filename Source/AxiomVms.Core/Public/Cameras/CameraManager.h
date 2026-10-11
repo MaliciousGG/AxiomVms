@@ -7,7 +7,7 @@
 #include <string>
 #include <unordered_map>
 
-namespace AxiomVms
+namespace Axiom
 {
     class CameraSession;
     class ICameraStreamFactory;

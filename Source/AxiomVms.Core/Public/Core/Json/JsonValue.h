@@ -3,7 +3,7 @@
 #include "Core/Types.h"
 
 
-namespace AxiomVms
+namespace Axiom
 {
     class JsonValue;
 

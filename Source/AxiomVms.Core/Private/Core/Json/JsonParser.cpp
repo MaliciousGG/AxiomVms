@@ -7,7 +7,7 @@
 #include <cctype>
 #include <cstdlib>
 
-namespace AxiomVms
+namespace Axiom
 {
     JsonValue JsonParser::Parse(const FString& input)
     {

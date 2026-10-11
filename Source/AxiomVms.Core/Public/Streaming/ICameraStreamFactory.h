@@ -5,7 +5,7 @@
 
 #include <memory>
 
-namespace AxiomVms
+namespace Axiom
 {
     class ICameraStreamFactory
     {

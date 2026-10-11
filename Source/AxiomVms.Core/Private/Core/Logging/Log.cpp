@@ -2,7 +2,7 @@
 
 #include <utility>
 
-namespace AxiomVms
+namespace Axiom
 {
     std::unique_ptr<ILogger> Log::Logger_;
 

@@ -6,7 +6,7 @@
 #include <ranges>
 #include <utility>
 
-namespace AxiomVms
+namespace Axiom
 {
     CameraManager::CameraManager(std::unique_ptr<ICameraStreamFactory> streamFactory)
         : StreamFactory_(std::move(streamFactory))

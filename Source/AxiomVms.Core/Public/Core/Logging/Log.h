@@ -7,7 +7,7 @@
 #include <string_view>
 #include <utility>
 
-namespace AxiomVms
+namespace Axiom
 {
     class Log
     {
@@ -54,10 +54,10 @@ namespace AxiomVms
 #if !defined(NDEBUG)
 
     #define AXIOM_LOG_TRACE(...) \
-        ::AxiomVms::Log::Trace(__VA_ARGS__)
+        ::Axiom::Log::Trace(__VA_ARGS__)
 
     #define AXIOM_LOG_DEBUG(...) \
-        ::AxiomVms::Log::Debug(__VA_ARGS__)
+        ::Axiom::Log::Debug(__VA_ARGS__)
 
 #else
 
@@ -67,13 +67,13 @@ namespace AxiomVms
 #endif
 
 #define AXIOM_LOG_INFO(...) \
-    ::AxiomVms::Log::Info(__VA_ARGS__)
+    ::Axiom::Log::Info(__VA_ARGS__)
 
 #define AXIOM_LOG_WARNING(...) \
-    ::AxiomVms::Log::Warning(__VA_ARGS__)
+    ::Axiom::Log::Warning(__VA_ARGS__)
 
 #define AXIOM_LOG_ERROR(...) \
-    ::AxiomVms::Log::Error(__VA_ARGS__)
+    ::Axiom::Log::Error(__VA_ARGS__)
 
 #define AXIOM_LOG_FATAL(...) \
-    ::AxiomVms::Log::Fatal(__VA_ARGS__)
+    ::Axiom::Log::Fatal(__VA_ARGS__)

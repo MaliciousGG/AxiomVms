@@ -2,7 +2,7 @@
 
 #include "Core/Logging/ILogger.h"
 
-namespace AxiomVms
+namespace Axiom
 {
     class ConsoleLogger final : public ILogger
     {

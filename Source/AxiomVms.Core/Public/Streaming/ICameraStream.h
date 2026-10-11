@@ -1,7 +1,7 @@
 #pragma once
 #include "CameraStreamStats.h"
 
-namespace AxiomVms
+namespace Axiom
 {
     class ICameraStream
     {

@@ -2,7 +2,7 @@
 
 #include "Streaming/ICameraStream.h"
 
-namespace AxiomVms
+namespace Axiom
 {
     class NullCameraStream final : public ICameraStream
     {

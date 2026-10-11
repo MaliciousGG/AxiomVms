@@ -2,7 +2,7 @@
 
 #include "Core/Containers/TArray.h"
 
-namespace AxiomVms
+namespace Axiom
 {
     template<typename T>
     TArray<T>::TArray()

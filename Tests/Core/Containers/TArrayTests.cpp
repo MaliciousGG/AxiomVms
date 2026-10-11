@@ -5,7 +5,7 @@
 #include <cstdint>
 #include <memory>
 
-namespace AxiomVms::Tests
+namespace Axiom::Tests
 {
     TEST(TArrayTests, EmptyArrayIsEmpty)
     {
@@ -22,7 +22,7 @@ namespace AxiomVms::Tests
     TEST(TArrayTests, ArrayCanBeCopied)
     {
         const TArray<std::uint8_t> array{1, 2, 3};
-        const TArray<std::uint8_t> copy(array);
+        const TArray copy(array);
 
         for (size_t i = 0; i < array.Num(); ++i)
         {

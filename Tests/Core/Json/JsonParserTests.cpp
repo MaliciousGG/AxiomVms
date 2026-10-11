@@ -2,7 +2,7 @@
 
 #include "Core/Json/JsonParser.h"
 
-namespace AxiomVms::Tests
+namespace Axiom::Tests
 {
     TEST(JsonParserTests, EmptyInputReturnsEmptyValue)
     {

@@ -1,7 +1,7 @@
 #include <cstdint>
 #include <string>
 
-namespace AxiomVms
+namespace Axiom
 {
     enum class ELogLevel : std::uint8_t
     {

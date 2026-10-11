@@ -2,7 +2,7 @@
 
 #include "Core/Types.h"
 
-namespace AxiomVms
+namespace Axiom
 {
     struct JsonSourceLocation
     {

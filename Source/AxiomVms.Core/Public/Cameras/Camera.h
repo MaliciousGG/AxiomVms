@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <string>
 
-namespace AxiomVms
+namespace Axiom
 {
     enum class ECameraState : std::uint8_t
     {

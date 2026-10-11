@@ -5,7 +5,7 @@
 #include "Core/Json/JsonValue.h"
 #include "Core/Json/JsonSourceLocation.h"
 
-namespace AxiomVms
+namespace Axiom
 {
     class JsonParser
     {

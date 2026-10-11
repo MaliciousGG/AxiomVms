@@ -8,7 +8,7 @@
 #include <utility>
 #include "Core/Types.h"
 
-namespace AxiomVms
+namespace Axiom
 {
     template<typename T>
     class TArray

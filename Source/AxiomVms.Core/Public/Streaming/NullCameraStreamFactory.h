@@ -3,7 +3,7 @@
 #include "Streaming/ICameraStreamFactory.h"
 #include "Cameras/Camera.h"
 
-namespace AxiomVms
+namespace Axiom
 {
     class NullCameraStreamFactory final : public ICameraStreamFactory
     {

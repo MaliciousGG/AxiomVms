@@ -1,7 +1,7 @@
 #include "Core/Json/JsonValue.h"
 #include "Core/Assert.h"
 
-namespace AxiomVms
+namespace Axiom
 {
     JsonValue::JsonValue()
         : ValueType_(EJsonValueType::Null)

@@ -4,7 +4,7 @@
 
 #include <string_view>
 
-namespace AxiomVms
+namespace Axiom
 {
     class ILogger
     {

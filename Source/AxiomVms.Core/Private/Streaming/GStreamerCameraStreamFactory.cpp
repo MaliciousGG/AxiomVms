@@ -3,7 +3,7 @@
 
 #include <memory>
 
-namespace AxiomVms
+namespace Axiom
 {
     std::unique_ptr<ICameraStream> GStreamerCameraStreamFactory::CreateCameraStream(const Camera& camera)
     {
