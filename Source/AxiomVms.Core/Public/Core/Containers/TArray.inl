@@ -193,54 +193,39 @@ namespace Axiom
 
         if (NewSize < Size_)
         {
-            // Destroy removed elements, starting from the end.
-            while (Size_ > NewSize)
+            // Destroy removed elements in reverse order.
+            for (Size_T Index = Size_; Index > NewSize; --Index)
             {
-                --Size_;
-                Data_[Size_].~T();
+                Data_[Index - 1].~T();
             }
+
+            Size_ = NewSize;
+
+            return;
         }
 
         Reserve(NewSize);
 
-        const Size_T OldSize = Size_;      
+        const Size_T OldSize = Size_;
 
-        if constexpr (!std::is_trivially_destructible_v<T>)
-        {
-            while (Size_ > OldSize)
-            {
-                --Size_;
-
-                Data_[Size_].~T();
-            }
-        }
-        else
-        {
-            Size_ = OldSize;
-        }
+        Size_T ConstructedEnd = OldSize;
 
         try
         {
-            while (Size_ < NewSize)
+            // Construct the additional elements without changing the logical size.
+            for (; ConstructedEnd < NewSize; ++ConstructedEnd)
             {
-                ::new (static_cast<void*>(Data_ + Size_)) T();
-
-                ++Size_;
+                ::new (static_cast<void*>(Data_ + ConstructedEnd)) T();
             }
         }
         catch (...)
         {
-            // Restore the original size if construction fails.
-            // Capacity may remain larger after Reserve().
-            while (Size_ > OldSize)
-            {
-                --Size_;
-
-                Data_[Size_].~T();
-            }
+            std::destroy(Data_ + OldSize,Data_ + ConstructedEnd);
 
             throw;
         }
+
+        Size_ = NewSize;
     }
 
     template<typename T>
@@ -301,16 +286,25 @@ namespace Axiom
         }
 
         const Size_T NewCapacity = Capacity_ == 0 ? 1 : (Capacity_ > Limit / 2 ? Limit : Capacity_ * 2);
-        
+
         T* NewData = Allocator.allocate(NewCapacity);
-        
-        Size_T Constructed = 0;
-        
+
+        // Construct first because arguments may reference existing elements.
         try
         {
-            // Construct first so arguments may refer to existing elements.
             ::new (static_cast<void*>(NewData + Size_)) T(std::forward<Args>(InArgs)...);
-            
+        }
+        catch (...)
+        {
+            Allocator.deallocate(NewData, NewCapacity);
+
+            throw;
+        }
+
+        Size_T Constructed = 0;
+
+        try
+        {
             for (; Constructed < Size_; ++Constructed)
             {
                 ::new (static_cast<void*>(NewData + Constructed)) T(std::move_if_noexcept(Data_[Constructed]));
@@ -320,8 +314,11 @@ namespace Axiom
         {
             std::destroy(NewData, NewData + Constructed);
 
+            // Its construction succeeded before relocation started.
+            std::destroy_at(NewData + Size_);
+
             Allocator.deallocate(NewData, NewCapacity);
-            
+
             throw;
         }
 
