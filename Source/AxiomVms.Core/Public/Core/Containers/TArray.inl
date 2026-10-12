@@ -1,5 +1,13 @@
 ﻿#pragma once
 
+#include <algorithm>
+#include <initializer_list>
+#include <memory>
+#include <new>
+#include <stdexcept>
+#include <utility>
+#include <Core/Assert.h>
+
 #include "Core/Containers/TArray.h"
 
 namespace Axiom
@@ -10,14 +18,23 @@ namespace Axiom
     {}
 
     template<typename T>
-    TArray<T>::TArray(std::initializer_list<T> list)
+    TArray<T>::TArray(std::initializer_list<T> InList)
         : Data_(nullptr)
     {
-        Reserve(list.size());
-
-        for (const T& element : list)
+        try
         {
-            Add(element);
+            Reserve(InList.size());
+
+            for (const T& Element : InList)
+            {
+                Emplace(Element);
+            }
+        }
+        catch (...)
+        {
+            Empty();
+
+            throw;
         }
     }
 
@@ -28,118 +45,117 @@ namespace Axiom
     }
 
     template<typename T>
-    TArray<T>::TArray(const TArray& other)
+    TArray<T>::TArray(const TArray& Other)
         : Data_(nullptr)
-        , Size_(other.Size_)
-        , Capacity_(other.Capacity_)
     {
-        if (Capacity_ == 0)
+        try
         {
-            return;
+            Reserve(Other.Capacity_);
+
+            for (Size_T i = 0; i < Other.Size_; ++i)
+            {
+                Emplace(Other.Data_[i]);
+            }
         }
-
-        Data_ = new T[Capacity_];
-
-        for (std::size_t i = 0; i < Size_; ++i)
+        catch (...)
         {
-            Data_[i] = other.Data_[i];
+            Empty();
+
+            throw;
         }
     }
 
     template<typename T>
-    TArray<T>::TArray(TArray&& other) noexcept
-        : Data_(other.Data_)
-        , Size_(other.Size_)
-        , Capacity_(other.Capacity_)
+    TArray<T>::TArray(TArray&& Other) noexcept
+        : Data_(Other.Data_)
+        , Size_(Other.Size_)
+        , Capacity_(Other.Capacity_)
     {
-        other.Data_ = nullptr;
-        other.Size_ = 0;
-        other.Capacity_ = 0;
+        Other.Data_ = nullptr;
+        Other.Size_ = 0;
+        Other.Capacity_ = 0;
     }
 
     template<typename T>
-    TArray<T>& TArray<T>::operator=(const TArray &other)
+    TArray<T>& TArray<T>::operator=(const TArray& Other)
     {
-        if (this != &other)
+        if (this != &Other)
         {
-            TArray temp(other);
+            TArray Temp(Other);
 
-            Swap(temp);
+            Swap(Temp);
         }
 
         return *this;
     }
 
     template<typename T>
-    TArray<T>& TArray<T>::operator=(TArray&& other) noexcept
+    TArray<T>& TArray<T>::operator=(TArray&& Other) noexcept
     {
-        if (this == &other)
+        if (this != &Other)
         {
-            return *this;
+            Empty();
+
+            Data_ = Other.Data_;
+            Size_ = Other.Size_;
+            Capacity_ = Other.Capacity_;
+
+            Other.Data_ = nullptr;
+            Other.Size_ = 0;
+            Other.Capacity_ = 0;
         }
-
-        delete[] Data_;
-
-        Data_ = other.Data_;
-        Size_ = other.Size_;
-        Capacity_ = other.Capacity_;
-
-        other.Data_ = nullptr;
-        other.Size_ = 0;
-        other.Capacity_ = 0;
 
         return *this;
     }
 
     template<typename T>
-    T& TArray<T>::operator[](std::size_t index) noexcept
+    T& TArray<T>::operator[](Size_T Index) noexcept
     {
-        return Data_[index];
+        return Data_[Index];
     }
 
     template<typename T>
-    const T& TArray<T>::operator[](std::size_t index) const noexcept
+    const T& TArray<T>::operator[](Size_T Index) const noexcept
     {
-        return Data_[index];
+        return Data_[Index];
     }
 
     template<typename T>
-    T& TArray<T>::At(std::size_t index)
+    T& TArray<T>::At(Size_T Index)
     {
-        if (index > Size_)
+        if (Index >= Size_)
         {
             throw std::out_of_range("Index out of range.");
         }
 
-        return Data_[index];
+        return Data_[Index];
     }
 
     template<typename T>
-    const T& TArray<T>::At(std::size_t index) const
+    const T& TArray<T>::At(Size_T Index) const
     {
-        if (index > Size_)
+        if (Index >= Size_)
         {
             throw std::out_of_range("Index out of range.");
         }
 
-        return Data_[index];
+        return Data_[Index];
     }
 
+    template<typename T>
+    uint32 TArray<T>::Num() const noexcept
+    {
+        return static_cast<uint32>(Size_);
+    }
 
     template<typename T>
-    std::size_t TArray<T>::Num() const noexcept
+    Size_T TArray<T>::Size() const noexcept
     {
         return Size_;
     }
 
     template<typename T>
-    std::size_t TArray<T>::Size() const noexcept
-    {
-        return Size_;
-    }
-
-    template<typename T>
-    std::size_t TArray<T>::Max() const noexcept
+    Size_T TArray<T>::Max() const noexcept
     {
         return Capacity_;
     }
@@ -151,49 +167,80 @@ namespace Axiom
     }
 
     template<typename T>
-    void TArray<T>::Swap(TArray &other) noexcept
+    void TArray<T>::Swap(TArray& Other) noexcept
     {
-        std::swap(Data_, other.Data_);
-        std::swap(Size_, other.Size_);
-        std::swap(Capacity_, other.Capacity_);
+        std::swap(Data_, Other.Data_);
+        std::swap(Size_, Other.Size_);
+        std::swap(Capacity_, Other.Capacity_);
     }
 
+    template<typename T>
+    void TArray<T>::Reserve(const Size_T NewCapacity)
+    {
+        if (NewCapacity > Capacity_)
+        {
+            Reallocate(NewCapacity);
+        }
+    }
 
     template<typename T>
-    void TArray<T>::Reserve(const std::size_t newCapacity) noexcept
+    void TArray<T>::Resize(const Size_T NewSize)
     {
-        if (newCapacity <= Capacity_)
+        if (NewSize == Size_)
         {
             return;
         }
 
-        auto* newData = new T[newCapacity];
-
-        for (std::size_t i = 0; i < Size_; ++i)
+        if (NewSize < Size_)
         {
-            newData[i] = std::move(Data_[i]);
+            // Destroy removed elements, starting from the end.
+            while (Size_ > NewSize)
+            {
+                --Size_;
+                Data_[Size_].~T();
+            }
         }
 
-        delete[] Data_;
+        Reserve(NewSize);
 
-        Data_ = newData;
-        Capacity_ = newCapacity;
-    }
+        const Size_T OldSize = Size_;      
 
-    template<typename T>
-    void TArray<T>::Resize(const std::size_t newSize)
-    {
-        if (newSize == Size_)
+        if constexpr (!std::is_trivially_destructible_v<T>)
         {
-            return;
+            while (Size_ > OldSize)
+            {
+                --Size_;
+
+                Data_[Size_].~T();
+            }
+        }
+        else
+        {
+            Size_ = OldSize;
         }
 
-        if (newSize > Capacity_)
+        try
         {
-            Reserve(newSize);
-        }
+            while (Size_ < NewSize)
+            {
+                ::new (static_cast<void*>(Data_ + Size_)) T();
 
-        Size_ = newSize;
+                ++Size_;
+            }
+        }
+        catch (...)
+        {
+            // Restore the original size if construction fails.
+            // Capacity may remain larger after Reserve().
+            while (Size_ > OldSize)
+            {
+                --Size_;
+
+                Data_[Size_].~T();
+            }
+
+            throw;
+        }
     }
 
     template<typename T>
@@ -208,90 +255,129 @@ namespace Axiom
     void TArray<T>::Empty() noexcept
     {
         Clear();
-
-        ::operator delete(Data_);
-
+        
+        if (Data_ != nullptr)
+        {
+            std::allocator<T> Allocator;
+            
+            Allocator.deallocate(Data_, Capacity_);
+        }
+        
         Data_ = nullptr;
-        Size_ = 0;
         Capacity_ = 0;
     }
-
 
     template<typename T>
     void TArray<T>::Shrink()
     {
-        if (Size_ == Capacity_)
-        {
-            return;
-        }
-
         if (Size_ == 0)
         {
             Empty();
-
-            return;
         }
-
-        Reallocate(Size_);
+        else if (Size_ != Capacity_)
+        {
+            Reallocate(Size_);
+        }
     }
 
     template<typename T>
-    template<typename ... ArgumentTypes>
-    T& TArray<T>::Emplace(ArgumentTypes&&... arguments)
+    template<typename... Args>
+    T& TArray<T>::Emplace(Args&&... InArgs)
     {
-        if (Size_ == Capacity_)
+        if (Size_ < Capacity_)
         {
-            Grow();
+            ::new (static_cast<void*>(Data_ + Size_)) T(std::forward<Args>(InArgs)...);
+            
+            return Data_[Size_++];
         }
 
-        new (&Data_[Size_]) T(std::forward<ArgumentTypes>(arguments)...);
+        std::allocator<T> Allocator;
 
-        T& newElement = Data_[Size_];
-        ++Size_;
+        const Size_T Limit = std::allocator_traits<std::allocator<T>>::max_size(Allocator);
+        
+        if (Size_ >= Limit)
+        {
+            throw std::length_error("TArray capacity exceeded.");
+        }
 
-        return newElement;
+        const Size_T NewCapacity = Capacity_ == 0 ? 1 : (Capacity_ > Limit / 2 ? Limit : Capacity_ * 2);
+        
+        T* NewData = Allocator.allocate(NewCapacity);
+        
+        Size_T Constructed = 0;
+        
+        try
+        {
+            // Construct first so arguments may refer to existing elements.
+            ::new (static_cast<void*>(NewData + Size_)) T(std::forward<Args>(InArgs)...);
+            
+            for (; Constructed < Size_; ++Constructed)
+            {
+                ::new (static_cast<void*>(NewData + Constructed)) T(std::move_if_noexcept(Data_[Constructed]));
+            }
+        }
+        catch (...)
+        {
+            std::destroy(NewData, NewData + Constructed);
+
+            Allocator.deallocate(NewData, NewCapacity);
+            
+            throw;
+        }
+
+        DestroyElements();
+        
+        if (Data_ != nullptr)
+        {
+            Allocator.deallocate(Data_, Capacity_);
+        }
+            
+        Data_ = NewData;
+        Capacity_ = NewCapacity;
+
+        return Data_[Size_++];
     }
 
     template<typename T>
-    void TArray<T>::Add(const T& element)
+    void TArray<T>::Add(const T& InElement)
     {
-        if (Size_ == Capacity_)
-        {
-            Grow();
-        }
-
-        new (&Data_[Size_]) T(element);
-        ++Size_;
+        Emplace(InElement);
     }
 
     template<typename T>
-    void TArray<T>::Add(T&& element)
+    void TArray<T>::Add(T&& InElement)
     {
-        if (Size_ == Capacity_)
-        {
-            Grow();
-        }
-
-        new (&Data_[Size_]) T(std::move(element));
-        ++Size_;
+        Emplace(std::move(InElement));
     }
-
 
     template<typename T>
     void TArray<T>::Pop()
     {
-        if (Size_ == 0)
+        if (Size_ != 0)
         {
-            return;
+            Data_[--Size_].~T();
         }
-
-        --Size_;
     }
 
     template<typename T>
-    T& TArray<T>::PopBack()
+    T TArray<T>::PopBack()
     {
-        return Data_[--Size_];
+        if (Size_ == 0)
+        {
+            throw std::out_of_range("Cannot pop an empty TArray.");
+        }
+
+        T Result(std::move_if_noexcept(Data_[Size_ - 1]));
+
+        Pop();
+
+        return Result;
+    }
+
+    template <typename T>
+    T& TArray<T>::Front() noexcept
+    {
+        return Data_[0];
     }
 
     template<typename T>
@@ -333,62 +419,97 @@ namespace Axiom
     template<typename T>
     T* TArray<T>::End() noexcept
     {
-        return Data_ + Size_;
+        return Size_ == 0 ? Data_ : Data_ + Size_;
     }
 
     template<typename T>
     const T* TArray<T>::End() const noexcept
     {
-        return Data_ + Size_;
+        return Size_ == 0 ? Data_ : Data_ + Size_;
     }
 
     template<typename T>
     const T* TArray<T>::CEnd() const noexcept
     {
-        return Data_ + Size_;
+        return Size_ == 0 ? Data_ : Data_ + Size_;
     }
 
     template<typename T>
     void TArray<T>::Grow()
     {
-        const std::size_t newCapacity = Capacity_ == 0 ? 1: Capacity_ * 2;
+        std::allocator<T> Allocator;
 
-        Reallocate(newCapacity);
+        const Size_T Limit = std::allocator_traits<std::allocator<T>>::max_size(Allocator);
+
+        if (Capacity_ >= Limit)
+        {
+            throw std::length_error("TArray capacity exceeded.");
+        }
+
+        Reallocate(Capacity_ == 0 ? 1 : (Capacity_ > Limit / 2 ? Limit : Capacity_ * 2));
     }
 
     template<typename T>
-    void TArray<T>::Reallocate(std::size_t newCapacity)
+    void TArray<T>::Reallocate(Size_T NewCapacity)
     {
-        if (newCapacity < Size_)
+        NewCapacity = std::max(NewCapacity, Size_);
+
+        if (NewCapacity == Capacity_)
         {
-            newCapacity = Size_;
+            return;
         }
 
-        if (newCapacity != Capacity_)
+        if (NewCapacity == 0)
         {
-            auto* newData = static_cast<T*>(::operator new(newCapacity * sizeof(T)));
+            Empty();
 
-            for (std::size_t i = 0; i < Size_; ++i)
+            return;
+        }
+
+        std::allocator<T> Allocator;
+
+        if (NewCapacity > std::allocator_traits<std::allocator<T>>::max_size(Allocator))
+        {
+            throw std::length_error("TArray capacity exceeded.");
+        }
+
+        T* NewData = Allocator.allocate(NewCapacity);
+
+        Size_T Constructed = 0;
+
+        try
+        {
+            for (; Constructed < Size_; ++Constructed)
             {
-                new (&newData[i]) T(std::move(Data_[i]));
-
-                Data_[i].~T();
+                ::new (static_cast<void*>(NewData + Constructed)) T(std::move_if_noexcept(Data_[Constructed]));
             }
-
-            ::operator delete(Data_);
-
-            Data_ = newData;
-            Capacity_ = newCapacity;
         }
-    }
+        catch (...)
+        {
+            std::destroy(NewData, NewData + Constructed);
 
+            Allocator.deallocate(NewData, NewCapacity);
+
+            throw;
+        }
+
+        DestroyElements();
+
+        if (Data_ != nullptr)
+        {
+            Allocator.deallocate(Data_, Capacity_);
+        }
+
+        Data_ = NewData;
+        Capacity_ = NewCapacity;
+    }
 
     template<typename T>
     void TArray<T>::DestroyElements() noexcept
     {
-        for (std::size_t i = 0; i < Size_; ++i)
+        for (Size_T i = Size_; i > 0; --i)
         {
-            Data_[i].~T();
+            Data_[i - 1].~T();
         }
     }
 }

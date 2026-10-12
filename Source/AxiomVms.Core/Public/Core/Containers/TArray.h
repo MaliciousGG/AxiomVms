@@ -1,11 +1,6 @@
 ﻿#pragma once
 
-#include <algorithm>
-#include <cstddef>
 #include <initializer_list>
-#include <new>
-#include <stdexcept>
-#include <utility>
 #include "Core/Types.h"
 
 namespace Axiom
@@ -16,48 +11,51 @@ namespace Axiom
     public:
         TArray();
 
-        explicit TArray(std::initializer_list<T> list);
+        explicit TArray(std::initializer_list<T> InList);
         ~TArray();
 
-        TArray(const TArray& other);
-        TArray(TArray&& other) noexcept;
+        TArray(const TArray& Other);
+        TArray(TArray&& Other) noexcept;
 
-        TArray& operator=(const TArray& other);
-        TArray& operator=(TArray&& other) noexcept;
+        TArray& operator=(const TArray& Other);
+        TArray& operator=(TArray&& Other) noexcept;
 
-        T& operator[](std::size_t index) noexcept;
-        const T& operator[](std::size_t index) const noexcept;
+        T& operator[](Size_T Index) noexcept;
+        const T& operator[](Size_T Index) const noexcept;
 
-        T& At(std::size_t index);
-        const T& At(std::size_t index) const;
-
-        [[nodiscard]]
-        std::size_t Num() const noexcept;
+        T& At(Size_T Index);
+        const T& At(Size_T Index) const;
 
         [[nodiscard]]
-        std::size_t Size() const noexcept;
+        uint32 Num() const noexcept;
 
         [[nodiscard]]
-        std::size_t Max() const noexcept;
+        Size_T Size() const noexcept;
+
+        [[nodiscard]]
+        Size_T Max() const noexcept;
 
         [[nodiscard]]
         bool IsEmpty() const noexcept;
 
-        void Swap(TArray& other) noexcept;
-        void Reserve(std::size_t newCapacity) noexcept;
-        void Resize(std::size_t newSize);
+        void Swap(TArray& Other) noexcept;
+        void Reserve(Size_T NewCapacity);
+
+        void Resize(Size_T NewSize);
         void Clear() noexcept;
         void Empty() noexcept;
         void Shrink();
 
-        template<typename... ArgumentTypes>
-        T& Emplace(ArgumentTypes&&... arguments);
+        template<typename... Args>
+        T& Emplace(Args&&... InArgs);
 
-        void Add(const T& element);
-        void Add(T&& element);
+        void Add(const T& InElement);
+        void Add(T&& InElement);
 
         void Pop();
-        T& PopBack();
+        T PopBack();
+        
+        T& Front() noexcept;
         T& Back() noexcept;
 
         [[nodiscard]]
@@ -67,23 +65,19 @@ namespace Axiom
         const T* GetData() const noexcept;
 
         T* Begin() noexcept;
-
         const T* Begin() const noexcept;
-
         const T* CBegin() const noexcept;
 
         T* End() noexcept;
-
         const T* End() const noexcept;
-
         const T* CEnd() const noexcept;
     private:
         T* Data_{nullptr};
-        std::size_t Size_{0};
-        std::size_t Capacity_{0};
+        Size_T Size_{0};
+        Size_T Capacity_{0};
 
         void Grow();
-        void Reallocate(std::size_t newCapacity);
+        void Reallocate(Size_T NewCapacity);
         void DestroyElements() noexcept;
     };
 }
