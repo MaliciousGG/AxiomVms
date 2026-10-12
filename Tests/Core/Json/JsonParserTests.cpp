@@ -12,7 +12,7 @@ namespace Axiom::Tests
         const JsonValue Value = Parser.Parse(Input);
 
         EXPECT_TRUE(Value.IsNull());
-        EXPECT_EQ(Parser.GetErrors().size(), 1);
+        EXPECT_EQ(Parser.GetErrors().Size(), 1);
         EXPECT_EQ(Parser.GetErrors()[0].Message, "Input is empty");
     }
 
@@ -24,7 +24,7 @@ namespace Axiom::Tests
         const JsonValue Value = Parser.Parse(Input);
 
         EXPECT_TRUE(Value.IsArray());
-        EXPECT_EQ(Parser.GetErrors().size(), 0);
+        EXPECT_EQ(Parser.GetErrors().Size(), 0);
     }
 
     TEST(JsonParserTests, EmptyObjectReturnsEmptyObject)
@@ -35,7 +35,7 @@ namespace Axiom::Tests
         const JsonValue Value = Parser.Parse(Input);
 
         EXPECT_TRUE(Value.IsObject());
-        EXPECT_EQ(Parser.GetErrors().size(), 0);
+        EXPECT_EQ(Parser.GetErrors().Size(), 0);
     }
 
     TEST(JsonParserTests, StringValueReturnsString)
@@ -46,7 +46,7 @@ namespace Axiom::Tests
         const JsonValue Value = Parser.Parse(Input);
 
         EXPECT_TRUE(Value.IsString());
-        EXPECT_EQ(Parser.GetErrors().size(), 0);
+        EXPECT_EQ(Parser.GetErrors().Size(), 0);
     }
 
     TEST(JsonParserTests, NumberReturnsNumber)
@@ -57,7 +57,7 @@ namespace Axiom::Tests
         const JsonValue Value = Parser.Parse(Input);
 
         EXPECT_TRUE(Value.IsNumber());
-        EXPECT_EQ(Parser.GetErrors().size(), 0);
+        EXPECT_EQ(Parser.GetErrors().Size(), 0);
     }
 
     TEST(JsonParserTests, NegativeNumberReturnsNumber)
@@ -68,7 +68,7 @@ namespace Axiom::Tests
         const JsonValue Value = Parser.Parse(Input);
 
         EXPECT_TRUE(Value.IsNumber());
-        EXPECT_EQ(Parser.GetErrors().size(), 0);
+        EXPECT_EQ(Parser.GetErrors().Size(), 0);
     }
 
     TEST(JsonParserTests, DecimalNumberReturnsNumber)
@@ -79,7 +79,7 @@ namespace Axiom::Tests
         const JsonValue Value = Parser.Parse(Input);
 
         EXPECT_TRUE(Value.IsNumber());
-        EXPECT_EQ(Parser.GetErrors().size(), 0);
+        EXPECT_EQ(Parser.GetErrors().Size(), 0);
     }
 
     TEST(JsonParserTests, TrueReturnsBoolean)
@@ -90,7 +90,7 @@ namespace Axiom::Tests
         const JsonValue Value = Parser.Parse(Input);
 
         EXPECT_TRUE(Value.IsBoolean());
-        EXPECT_EQ(Parser.GetErrors().size(), 0);
+        EXPECT_EQ(Parser.GetErrors().Size(), 0);
     }
 
     TEST(JsonParserTests, FalseReturnsBoolean)
@@ -101,7 +101,7 @@ namespace Axiom::Tests
         const JsonValue Value = Parser.Parse(Input);
 
         EXPECT_TRUE(Value.IsBoolean());
-        EXPECT_EQ(Parser.GetErrors().size(), 0);
+        EXPECT_EQ(Parser.GetErrors().Size(), 0);
     }
 
     TEST(JsonParserTests, NullReturnsNull)
@@ -112,7 +112,7 @@ namespace Axiom::Tests
         const JsonValue Value = Parser.Parse(Input);
 
         EXPECT_TRUE(Value.IsNull());
-        EXPECT_EQ(Parser.GetErrors().size(), 0);
+        EXPECT_EQ(Parser.GetErrors().Size(), 0);
     }
 
     TEST(JsonParserTests, WhitespaceBeforeValueIsIgnored)
@@ -123,7 +123,7 @@ namespace Axiom::Tests
         const JsonValue Value = Parser.Parse(Input);
 
         EXPECT_TRUE(Value.IsNumber());
-        EXPECT_EQ(Parser.GetErrors().size(), 0);
+        EXPECT_EQ(Parser.GetErrors().Size(), 0);
     }
 
     TEST(JsonParserTests, WhitespaceAfterValueIsIgnored)
@@ -134,7 +134,7 @@ namespace Axiom::Tests
         const JsonValue Value = Parser.Parse(Input);
 
         EXPECT_TRUE(Value.IsNumber());
-        EXPECT_EQ(Parser.GetErrors().size(), 0);
+        EXPECT_EQ(Parser.GetErrors().Size(), 0);
     }
 
     TEST(JsonParserTests, NewLinesAndTabsAreIgnored)
@@ -145,7 +145,7 @@ namespace Axiom::Tests
         const JsonValue Value = Parser.Parse(Input);
 
         EXPECT_TRUE(Value.IsBoolean());
-        EXPECT_EQ(Parser.GetErrors().size(), 0);
+        EXPECT_EQ(Parser.GetErrors().Size(), 0);
     }
 
     TEST(JsonParserTests, SimpleArrayReturnsArray)
@@ -156,7 +156,7 @@ namespace Axiom::Tests
         const JsonValue Value = Parser.Parse(Input);
 
         EXPECT_TRUE(Value.IsArray());
-        EXPECT_EQ(Parser.GetErrors().size(), 0);
+        EXPECT_EQ(Parser.GetErrors().Size(), 0);
     }
 
     TEST(JsonParserTests, MixedArrayReturnsArray)
@@ -167,7 +167,7 @@ namespace Axiom::Tests
         const JsonValue Value = Parser.Parse(Input);
 
         EXPECT_TRUE(Value.IsArray());
-        EXPECT_EQ(Parser.GetErrors().size(), 0);
+        EXPECT_EQ(Parser.GetErrors().Size(), 0);
     }
 
     TEST(JsonParserTests, NestedArrayReturnsArray)
@@ -178,7 +178,7 @@ namespace Axiom::Tests
         const JsonValue Value = Parser.Parse(Input);
 
         EXPECT_TRUE(Value.IsArray());
-        EXPECT_EQ(Parser.GetErrors().size(), 0);
+        EXPECT_EQ(Parser.GetErrors().Size(), 0);
     }
 
     TEST(JsonParserTests, SimpleObjectReturnsObject)
@@ -189,7 +189,7 @@ namespace Axiom::Tests
         const JsonValue Value = Parser.Parse(Input);
 
         EXPECT_TRUE(Value.IsObject());
-        EXPECT_EQ(Parser.GetErrors().size(), 0);
+        EXPECT_EQ(Parser.GetErrors().Size(), 0);
     }
 
     TEST(JsonParserTests, ObjectWithMultipleValuesReturnsObject)
@@ -200,7 +200,7 @@ namespace Axiom::Tests
         const JsonValue Value = Parser.Parse(Input);
 
         EXPECT_TRUE(Value.IsObject());
-        EXPECT_EQ(Parser.GetErrors().size(), 0);
+        EXPECT_EQ(Parser.GetErrors().Size(), 0);
     }
 
     TEST(JsonParserTests, NestedObjectReturnsObject)
@@ -211,7 +211,7 @@ namespace Axiom::Tests
         const JsonValue Value = Parser.Parse(Input);
 
         EXPECT_TRUE(Value.IsObject());
-        EXPECT_EQ(Parser.GetErrors().size(), 0);
+        EXPECT_EQ(Parser.GetErrors().Size(), 0);
     }
 
     TEST(JsonParserTests, ObjectContainingArrayReturnsObject)
@@ -222,7 +222,7 @@ namespace Axiom::Tests
         const JsonValue Value = Parser.Parse(Input);
 
         EXPECT_TRUE(Value.IsObject());
-        EXPECT_EQ(Parser.GetErrors().size(), 0);
+        EXPECT_EQ(Parser.GetErrors().Size(), 0);
     }
 
     TEST(JsonParserTests, ArrayOfObjectsReturnsArray)
@@ -233,7 +233,7 @@ namespace Axiom::Tests
         const JsonValue Value = Parser.Parse(Input);
 
         EXPECT_TRUE(Value.IsArray());
-        EXPECT_EQ(Parser.GetErrors().size(), 0);
+        EXPECT_EQ(Parser.GetErrors().Size(), 0);
     }
 
     TEST(JsonParserTests, EscapedQuoteInStringReturnsString)
@@ -244,7 +244,7 @@ namespace Axiom::Tests
         const JsonValue Value = Parser.Parse(Input);
 
         EXPECT_TRUE(Value.IsString());
-        EXPECT_EQ(Parser.GetErrors().size(), 0);
+        EXPECT_EQ(Parser.GetErrors().Size(), 0);
     }
 
     TEST(JsonParserTests, MalformedJsonReturnsError_1)
@@ -255,7 +255,7 @@ namespace Axiom::Tests
         const JsonValue Value = Parser.Parse(Input);
 
         EXPECT_TRUE(Value.IsNull());
-        EXPECT_EQ(Parser.GetErrors().size(), 1);
+        EXPECT_EQ(Parser.GetErrors().Size(), 1);
         EXPECT_EQ(Parser.GetErrors()[0].Message, FString("Unexpected end of input while parsing Json object"));
     }
 
@@ -267,7 +267,7 @@ namespace Axiom::Tests
         const JsonValue Value = Parser.Parse(Input);
 
         EXPECT_TRUE(Value.IsNull());
-        EXPECT_EQ(Parser.GetErrors().size(), 1);
+        EXPECT_EQ(Parser.GetErrors().Size(), 1);
         EXPECT_EQ(Parser.GetErrors()[0].Message, FString("Unexpected trailing characters after Json value"));
     }
 
@@ -279,7 +279,7 @@ namespace Axiom::Tests
         const JsonValue Value = Parser.Parse(Input);
 
         EXPECT_TRUE(Value.IsNull());
-        EXPECT_EQ(Parser.GetErrors().size(), 2);
+        EXPECT_EQ(Parser.GetErrors().Size(), 2);
 
     }
 
@@ -291,7 +291,7 @@ namespace Axiom::Tests
         const JsonValue Value = Parser.Parse(Input);
 
         EXPECT_TRUE(Value.IsNull());
-        EXPECT_EQ(Parser.GetErrors().size(), 2);
+        EXPECT_EQ(Parser.GetErrors().Size(), 2);
     }
 
     TEST(JsonParserTests, ObjectMissingClosingBraceReturnsError)
@@ -302,7 +302,7 @@ namespace Axiom::Tests
         const JsonValue Value = Parser.Parse(Input);
 
         EXPECT_TRUE(Value.IsNull());
-        EXPECT_EQ(Parser.GetErrors().size(), 1);
+        EXPECT_EQ(Parser.GetErrors().Size(), 1);
     }
 
     TEST(JsonParserTests, ArrayMissingClosingBracketReturnsError)
@@ -313,7 +313,7 @@ namespace Axiom::Tests
         const JsonValue Value = Parser.Parse(Input);
 
         EXPECT_TRUE(Value.IsNull());
-        EXPECT_EQ(Parser.GetErrors().size(), 1);
+        EXPECT_EQ(Parser.GetErrors().Size(), 1);
     }
 
     TEST(JsonParserTests, TrailingCommaInArrayReturnsError)
@@ -324,7 +324,7 @@ namespace Axiom::Tests
         const JsonValue Value = Parser.Parse(Input);
 
         EXPECT_TRUE(Value.IsNull());
-        EXPECT_FALSE(Parser.GetErrors().empty());
+        EXPECT_FALSE(Parser.GetErrors().IsEmpty());
     }
 
     TEST(JsonParserTests, TrailingCommaInObjectReturnsError)
@@ -335,7 +335,7 @@ namespace Axiom::Tests
         const JsonValue Value = Parser.Parse(Input);
 
         EXPECT_TRUE(Value.IsNull());
-        EXPECT_FALSE(Parser.GetErrors().empty());
+        EXPECT_FALSE(Parser.GetErrors().IsEmpty());
     }
 
     TEST(JsonParserTests, InvalidBooleanReturnsError)
@@ -346,7 +346,7 @@ namespace Axiom::Tests
         const JsonValue Value = Parser.Parse(Input);
 
         EXPECT_TRUE(Value.IsNull());
-        EXPECT_FALSE(Parser.GetErrors().empty());
+        EXPECT_FALSE(Parser.GetErrors().IsEmpty());
     }
 
     TEST(JsonParserTests, InvalidNullReturnsError)
@@ -357,7 +357,7 @@ namespace Axiom::Tests
         const JsonValue Value = Parser.Parse(Input);
 
         EXPECT_TRUE(Value.IsNull());
-        EXPECT_FALSE(Parser.GetErrors().empty());
+        EXPECT_FALSE(Parser.GetErrors().IsEmpty());
     }
 
     TEST(JsonParserTests, InvalidCharacterReturnsError)
@@ -368,7 +368,7 @@ namespace Axiom::Tests
         const JsonValue Value = Parser.Parse(Input);
 
         EXPECT_TRUE(Value.IsNull());
-        EXPECT_FALSE(Parser.GetErrors().empty());
+        EXPECT_FALSE(Parser.GetErrors().IsEmpty());
     }
 
     TEST(JsonParserTests, UnterminatedStringReturnsError)
@@ -379,6 +379,6 @@ namespace Axiom::Tests
         const JsonValue Value = Parser.Parse(Input);
 
         EXPECT_TRUE(Value.IsNull());
-        EXPECT_FALSE(Parser.GetErrors().empty());
+        EXPECT_FALSE(Parser.GetErrors().IsEmpty());
     }
 }

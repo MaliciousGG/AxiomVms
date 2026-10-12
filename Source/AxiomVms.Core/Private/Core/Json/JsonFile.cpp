@@ -18,7 +18,7 @@ namespace Axiom
         JsonParser Parser;
         JsonValue ParsedRoot = Parser.Parse(Text);
 
-        if (const TArray<JsonParseError> Errors = Parser.GetErrors(); !Errors.empty())
+        if (const TArray<JsonParseError> Errors = Parser.GetErrors(); !Errors.IsEmpty())
         {
             Error = Errors[0].Message;
 

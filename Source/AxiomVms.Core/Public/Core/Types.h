@@ -31,9 +31,6 @@ using FString = std::string;
 template<typename... T>
 using TVariant = std::variant<T...>;
 
-#include <vector>
-template<typename T>
-using TArray = std::vector<T>;
 
 #include <unordered_map>
 template<typename T, typename V>
