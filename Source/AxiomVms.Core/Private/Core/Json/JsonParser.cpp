@@ -4,6 +4,8 @@
 #include "Core/Types.h"
 #include "Core/Logging/Log.h"
 
+#include "Core/Containers/TArray.h"
+
 #include <cctype>
 #include <cstdlib>
 
@@ -38,7 +40,7 @@ namespace Axiom
             AddError({ .Message = "Unexpected trailing characters after Json value", .Location = Location_ });
         }
 
-        if (!Errors_.empty())
+        if (!Errors_.IsEmpty())
         {
             LogErrors();
 
@@ -149,7 +151,7 @@ namespace Axiom
 
             const JsonValue Value = ParseValue();
 
-            if (!Errors_.empty())
+            if (!Errors_.IsEmpty())
             {
                 return {};
             }
@@ -208,12 +210,12 @@ namespace Axiom
         {
             JsonValue Value = ParseValue();
 
-            if (!Errors_.empty())
+            if (!Errors_.IsEmpty())
             {
                 return {};
             }
 
-            Array.emplace_back(Value);
+            Array.Emplace(Value);
 
             SkipWhitespace();
 
@@ -580,15 +582,17 @@ namespace Axiom
 
     void JsonParser::LogErrors()
     {
-        if (Errors_.empty())
+        if (Errors_.IsEmpty())
         {
             return;
         }
 
-        AXIOM_LOG_ERROR("AxiomVms encountered {} errors while parsing Json: {}", Errors_.size(), Input_);
+        AXIOM_LOG_ERROR("AxiomVms encountered {} errors while parsing Json: {}", Errors_.Size(), Input_);
 
-        for (const auto& [Message, Location] : Errors_)
+        for (auto Iterator = Errors_.Begin(); Iterator != Errors_.End(); ++Iterator)
         {
+            const auto& [Message, Location] = *Iterator;
+
             AXIOM_LOG_ERROR("Error at line {} column {}: {}", Location.Line, Location.Column, Message);
         }
     }
@@ -601,7 +605,7 @@ namespace Axiom
             return;
         }
 
-        Errors_.emplace_back(Error);
+        Errors_.Emplace(Error);
     }
 
 
@@ -609,6 +613,6 @@ namespace Axiom
     {
         Input_ = {};
         Location_ = {};
-        Errors_.clear();
+        Errors_.Clear();
     }
 }

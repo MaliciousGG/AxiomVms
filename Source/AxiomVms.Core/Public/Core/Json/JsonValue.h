@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Core/Containers/TArray.h>
+
 #include "Core/Types.h"
 
 

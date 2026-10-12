@@ -85,7 +85,7 @@ namespace Axiom::Tests
     {
         const JsonValue JsonValue(JsonArray{});
     
-        EXPECT_TRUE(JsonValue.AsArray().empty());
+        EXPECT_TRUE(JsonValue.AsArray().IsEmpty());
     }
     
     TEST(JsonValueTests, AsObject)
@@ -99,13 +99,13 @@ namespace Axiom::Tests
     {
         JsonArray Array;
 
-        Array.emplace_back(true);
-        Array.emplace_back(1.0);
-        Array.emplace_back("test");
+        Array.Emplace(true);
+        Array.Emplace(1.0);
+        Array.Emplace("test");
 
         const JsonValue JsonValue(Array);
 
-        EXPECT_EQ(JsonValue.AsArray().size(), 3);
+        EXPECT_EQ(JsonValue.AsArray().Size(), 3);
         EXPECT_EQ(JsonValue.AsArray()[0].AsBoolean(), true);
         EXPECT_DOUBLE_EQ(JsonValue.AsArray()[1].AsFloat64(), 1.0);
         EXPECT_EQ(JsonValue.AsArray()[2].AsFString(), "test");
